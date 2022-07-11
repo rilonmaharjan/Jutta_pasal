@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "85094249761",
+    "project_id": "jutta-e38bd",
+    "storage_bucket": "jutta-e38bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85094249761:android:b4887eccada5dbf47e7a60",
+        "android_client_info": {
+          "package_name": "com.example.jutta_pasal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85094249761-ijk5o0mu32261lblrlds8pr7rm9vaoea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jutta_pasal",
+            "certificate_hash": "7b3168da4a2e92976cf2d9bad65bf176f91692bd"
+          }
+        },
+        {
+          "client_id": "85094249761-sqr1io7m3v4prraqaqb79g1qt312ro7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcum64d0rptKBd0l2BhXe6riClV5o3GQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85094249761-sqr1io7m3v4prraqaqb79g1qt312ro7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
