@@ -3,10 +3,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ProductTile extends StatefulWidget {
+class AdminProductTile extends StatefulWidget {
   final image, desc, title, price, discount;
   final VoidCallback? onTap;
-  const ProductTile(
+  const AdminProductTile(
       {Key? key,
       this.image,
       this.title,
@@ -17,10 +17,10 @@ class ProductTile extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ProductTile> createState() => _AdminProductsState();
+  State<AdminProductTile> createState() => _AdminProductsState();
 }
 
-class _AdminProductsState extends State<ProductTile> {
+class _AdminProductsState extends State<AdminProductTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

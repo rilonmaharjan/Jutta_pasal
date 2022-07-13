@@ -1,5 +1,5 @@
+import 'package:captcha/bottomnav.dart';
 import 'package:captcha/forgotpassword.dart';
-import 'package:captcha/jutta.dart';
 import 'package:captcha/main.dart';
 import 'package:captcha/register.dart';
 import 'package:email_validator/email_validator.dart';
@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
               child: Text('Something went wrong!'),
             );
           } else if (snapshot.hasData) {
-            return const Jutta();
+            return const BottomNav(index: 0);
           } else {
             return Scaffold(
               body: SingleChildScrollView(
@@ -134,13 +134,10 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 65,
-                        ),
                         Image.asset(
-                          "assets/images/gif.gif",
-                          height: 115,
-                          width: 115,
+                          "assets/images/logo1.png",
+                          height: 180,
+                          width: 180,
                         ),
                         const SizedBox(
                           height: 55,

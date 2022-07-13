@@ -1,4 +1,4 @@
-import 'package:captcha/jutta.dart';
+import 'package:captcha/bottomnav.dart';
 import 'package:captcha/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
@@ -42,7 +42,9 @@ class _RegisterState extends State<Register> {
             child: Text('Something went wrong!'),
           );
         } else if (snapshot.hasData) {
-          return const Jutta();
+          return const BottomNav(
+            index: 0,
+          );
         } else {
           return Scaffold(
             body: SingleChildScrollView(
@@ -98,13 +100,10 @@ class _RegisterState extends State<Register> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 65,
-                      ),
                       Image.asset(
-                        "assets/images/gif.gif",
-                        height: 105,
-                        width: 105,
+                        "assets/images/logo1.png",
+                        height: 180,
+                        width: 180,
                       ),
                       const SizedBox(
                         height: 55,

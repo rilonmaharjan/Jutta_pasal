@@ -78,7 +78,7 @@ class _OrderState extends State<Order> {
   void initState() {
     widget.discount.isEmpty
         ? discountPercent = 0
-        : discountPercent = int.parse(widget.discount);
+        : discountPercent = double.parse(widget.discount);
     total = int.parse(widget.price);
     getAddressFromLatLong();
     super.initState();

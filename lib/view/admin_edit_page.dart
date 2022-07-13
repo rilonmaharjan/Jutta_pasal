@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,18 +13,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 class AdminEditPage extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final brandEditName, title, desc, category, price, discount, image, productID;
+  final brandEditName,
+      title,
+      desc,
+      category,
+      price,
+      discount,
+      image,
+      productID,
+      offer,
+      type;
   const AdminEditPage(
       {Key? key,
-      this.brandEditName,
-      this.title,
-      this.desc,
-      this.price,
-      this.discount,
+      required this.brandEditName,
+      required this.title,
+      required this.desc,
+      required this.price,
+      required this.discount,
       this.image,
-      this.category,
-      this.productID})
+      required this.category,
+      required this.productID,
+      required this.offer,
+      required this.type})
       : super(key: key);
 
   @override
@@ -32,8 +44,16 @@ class AdminEditPage extends StatefulWidget {
 class _AdminPageState extends State<AdminEditPage> {
   File? file;
   final box = GetStorage();
+
+  var dropDownCategory = "Category";
+  var dropDownOffer = "Offer";
+  var dropDownType = "Type";
+
   @override
   void initState() {
+    dropDownCategory = widget.category;
+    dropDownOffer = widget.offer;
+    dropDownType = widget.type;
     brandController.text = widget.brandEditName;
     titleController.text = widget.title;
     categoryController.text = widget.category;
@@ -110,13 +130,6 @@ class _AdminPageState extends State<AdminEditPage> {
                                       labelText: "Description"),
                                 ),
                                 TextFormField(
-                                  controller: categoryController,
-                                  textInputAction: TextInputAction.next,
-                                  textCapitalization: TextCapitalization.words,
-                                  decoration: const InputDecoration(
-                                      labelText: "Category"),
-                                ),
-                                TextFormField(
                                   controller: priceController,
                                   textInputAction: TextInputAction.next,
                                   keyboardType: TextInputType.number,
@@ -129,6 +142,98 @@ class _AdminPageState extends State<AdminEditPage> {
                                   textInputAction: TextInputAction.go,
                                   decoration: const InputDecoration(
                                       labelText: "Discount"),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    DropdownButton<String>(
+                                      value: dropDownCategory,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownCategory = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Category",
+                                        'Men',
+                                        'Women',
+                                        'Kids',
+                                        'Men,Women',
+                                        'Men,Kids',
+                                        'Women,Kids'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownOffer,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownOffer = newValue!;
+                                        });
+                                      },
+                                      items: <String>["Offer", 'Yes', 'No']
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownType,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownType = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Type",
+                                        'Sports',
+                                        'Classic',
+                                        'Casual'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -177,13 +282,6 @@ class _AdminPageState extends State<AdminEditPage> {
                                       labelText: "Description"),
                                 ),
                                 TextFormField(
-                                  controller: categoryController,
-                                  textInputAction: TextInputAction.next,
-                                  textCapitalization: TextCapitalization.words,
-                                  decoration: const InputDecoration(
-                                      labelText: "Category"),
-                                ),
-                                TextFormField(
                                   controller: priceController,
                                   textInputAction: TextInputAction.next,
                                   keyboardType: TextInputType.number,
@@ -196,6 +294,98 @@ class _AdminPageState extends State<AdminEditPage> {
                                   textInputAction: TextInputAction.go,
                                   decoration: const InputDecoration(
                                       labelText: "Discount"),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    DropdownButton<String>(
+                                      value: dropDownCategory,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownCategory = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Category",
+                                        'Men',
+                                        'Women',
+                                        'Kids',
+                                        'Men,Women',
+                                        'Men,Kids',
+                                        'Women,Kids'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownOffer,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownOffer = newValue!;
+                                        });
+                                      },
+                                      items: <String>["Offer", 'Yes', 'No']
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownType,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownType = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Type",
+                                        'Sports',
+                                        'Classic',
+                                        'Casual'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -266,9 +456,11 @@ class _AdminPageState extends State<AdminEditPage> {
           'brand_store': brandController.text,
           'productName': titleController.text,
           'description': descController.text,
-          'category': categoryController.text,
           'price': priceController.text,
           'discount': discountController.text,
+          'category': dropDownCategory.trim(),
+          'offer': dropDownOffer.trim(),
+          'type': dropDownType.trim(),
         };
         await documentReferencer
             .update(data)
@@ -305,10 +497,12 @@ class _AdminPageState extends State<AdminEditPage> {
             'brand_store': brandController.text,
             'productName': titleController.text,
             'description': descController.text,
-            'category': categoryController.text,
             'price': priceController.text,
             'discount': discountController.text,
-            'image': url
+            'image': url,
+            'category': dropDownCategory.trim(),
+            'offer': dropDownOffer.trim(),
+            'type': dropDownType.trim(),
           };
           await documentReferencer
               .update(data)

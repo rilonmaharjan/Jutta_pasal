@@ -25,40 +25,11 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-              ),
-              Image.asset(
-                "assets/images/gif.gif",
-                height: 150,
-                width: 150,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Jutta Pasal",
-                style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'OpenSans',
-                    decoration: TextDecoration.none,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.black),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          ),
+      body: Center(
+        child: Image.asset(
+          "assets/images/logo1.png",
+          height: 200,
+          width: 200,
         ),
       ),
     );

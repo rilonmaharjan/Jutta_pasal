@@ -1,10 +1,10 @@
-import 'package:captcha/admin_edit_page.dart';
-import 'package:captcha/tiles/product_tile..dart';
+import 'package:captcha/view/admin_edit_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'admin_upload_page.dart';
+import 'tiles/admin_product_tile.dart';
 
 class AdminViewPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -18,21 +18,95 @@ class AdminViewPage extends StatefulWidget {
 }
 
 class _AdminViewPageState extends State<AdminViewPage> {
+  final nameHolder = TextEditingController();
+  clearTextInput() {
+    nameHolder.clear();
+  }
+
+  var name = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black,
+                  size: 21,
+                ),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+            ],
+          ),
+        ],
+        title: Container(
+          width: double.infinity,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 236, 235, 235),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Center(
+            child: TextField(
+              onChanged: (val) {
+                setState(() {
+                  name = val;
+                });
+              },
+              controller: nameHolder,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 46, 46, 46),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.clear,
+                      color: Color.fromARGB(185, 44, 44, 44),
+                    ),
+                    onPressed: clearTextInput,
+                  ),
+                  hintText: 'Search...',
+                  border: InputBorder.none),
+            ),
+          ),
+        ),
+      ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
             SingleChildScrollView(
               child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("products")
-                      .snapshots(),
+                  stream: (name != "")
+                      ? FirebaseFirestore.instance
+                          .collection('products')
+                          .where('productName', isGreaterThanOrEqualTo: name)
+                          .where('productName', isLessThan: name + 'z')
+                          .snapshots()
+                      : FirebaseFirestore.instance
+                          .collection("products")
+                          .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else {
@@ -41,7 +115,7 @@ class _AdminViewPageState extends State<AdminViewPage> {
                       return Wrap(
                           children: List.generate(
                               firestoreitems.length,
-                              ((index) => ProductTile(
+                              ((index) => AdminProductTile(
                                     image: firestoreitems[index]['image'],
                                     title: firestoreitems[index]['productName'],
                                     desc: firestoreitems[index]['description'],
@@ -65,10 +139,13 @@ class _AdminViewPageState extends State<AdminViewPage> {
                                             .toString(),
                                         discount: firestoreitems[index]
                                             ['discount'],
+                                        offer: firestoreitems[index]['offer'],
+                                        type: firestoreitems[index]['type'],
                                       ));
                                     },
                                   ))));
                     }
+                    return const SizedBox();
                   }),
             ),
             Padding(
@@ -76,6 +153,7 @@ class _AdminViewPageState extends State<AdminViewPage> {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: FloatingActionButton(
+                    backgroundColor: const Color.fromARGB(255, 1, 1, 1),
                     child: const Icon(Icons.add),
                     onPressed: () {
                       Get.to(const AdminUploadPage(

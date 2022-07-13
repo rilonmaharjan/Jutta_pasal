@@ -173,7 +173,5 @@ class _SuperAdminUserEditPageState extends State<SuperAdminUserEditPage> {
         .then((value) => Get.snackbar('Deleted', 'Successfully Deleted',
             duration: const Duration(milliseconds: 2000),
             backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494)));
-
- 
   }
 }
