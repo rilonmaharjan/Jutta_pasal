@@ -1,29 +1,30 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:captcha/search_products.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'order.dart';
+import 'tiles/product_tile.dart';
 
-import 'brand_products.dart';
-import '../tiles/brandview_tile.dart';
-import 'search_brands.dart';
-
-class TabViewBrands extends StatefulWidget {
-  const TabViewBrands({Key? key}) : super(key: key);
+class TabViewShoes extends StatefulWidget {
+  const TabViewShoes({Key? key}) : super(key: key);
 
   @override
-  State<TabViewBrands> createState() => _TabViewBrandsState();
+  State<TabViewShoes> createState() => _TabViewShoesState();
 }
 
-class _TabViewBrandsState extends State<TabViewBrands> {
+class _TabViewShoesState extends State<TabViewShoes> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SearchBrands())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SearchProducts())),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 15, bottom: 15),
@@ -80,8 +81,8 @@ class _TabViewBrandsState extends State<TabViewBrands> {
           ),
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection("brand")
-                  .orderBy("brand_name", descending: true)
+                  .collection("products")
+                  .orderBy("productName", descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -93,20 +94,40 @@ class _TabViewBrandsState extends State<TabViewBrands> {
                       snapshot.data!.docs;
                   return ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: firestoreitems.length,
+                      itemCount: 1,
                       itemBuilder: (BuildContext context, int index) {
-                        return BrandViewTile(
-                          image: firestoreitems[index]['image'],
-                          brandName: firestoreitems[index]['brand_name'],
-                          onTap: () {
-                            Get.to(() => BrandProducts(
-                                  title: firestoreitems[index]['brand_name']
-                                      .toString(),
-                                ));
-                          },
-                        );
+                        return Wrap(
+                            children: List.generate(
+                                firestoreitems.length,
+                                ((index) => ProductTile(
+                                      image: firestoreitems[index]['image'],
+                                      title: firestoreitems[index]
+                                          ['productName'],
+                                      desc: firestoreitems[index]
+                                          ['description'],
+                                      price: firestoreitems[index]['price']
+                                          .toString(),
+                                      discount: firestoreitems[index]
+                                              ['discount']
+                                          .toString(),
+                                      onTap: () {
+                                        Get.to(() => Order(
+                                              url: firestoreitems[index]
+                                                  ['image'],
+                                              price: firestoreitems[index]
+                                                      ['price']
+                                                  .toString(),
+                                              title: firestoreitems[index]
+                                                  ['productName'],
+                                              discount: firestoreitems[index]
+                                                      ['discount']
+                                                  .toString(),
+                                              description: firestoreitems[index]
+                                                  ['description'],
+                                            ));
+                                      },
+                                    ))));
                       });
                 }
               }),

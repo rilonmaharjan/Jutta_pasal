@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:captcha/view/search_products.dart';
-import 'package:captcha/view/search_brands.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../order.dart';
+import 'order.dart';
 import '../tiles/product_tile.dart';
+import 'search_products.dart';
 
 class TabViewShoes extends StatefulWidget {
   const TabViewShoes({Key? key}) : super(key: key);

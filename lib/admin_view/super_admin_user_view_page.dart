@@ -2,17 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'brand_products.dart';
-import '../tiles/brandview_tile.dart';
+import '../tiles/user_tile.dart';
+import 'super_admin_user_edit_page.dart';
 
-class SearchBrands extends StatefulWidget {
-  const SearchBrands({Key? key}) : super(key: key);
+class SuperAdminUserViewPage extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
+
+  const SuperAdminUserViewPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<SearchBrands> createState() => _SearchBrandsState();
+  State<SuperAdminUserViewPage> createState() => _SuperAdminUserViewPageState();
 }
 
-class _SearchBrandsState extends State<SearchBrands> {
+class _SuperAdminUserViewPageState extends State<SuperAdminUserViewPage> {
   final nameHolder = TextEditingController();
   clearTextInput() {
     nameHolder.clear();
@@ -35,11 +39,11 @@ class _SearchBrandsState extends State<SearchBrands> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Icon(
                   Icons.arrow_back_ios,
-                  color: Color.fromARGB(255, 46, 46, 46),
+                  color: Colors.black,
                   size: 21,
                 ),
               ),
@@ -64,8 +68,8 @@ class _SearchBrandsState extends State<SearchBrands> {
                 });
               },
               controller: nameHolder,
-              autofocus: true,
               textCapitalization: TextCapitalization.words,
+              autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                   prefixIcon: const Icon(
@@ -87,44 +91,43 @@ class _SearchBrandsState extends State<SearchBrands> {
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: StreamBuilder<QuerySnapshot>(
-              stream: (name != "")
-                  ? FirebaseFirestore.instance
-                      .collection('brand')
-                      .where('brand_name', isGreaterThanOrEqualTo: name)
-                      .where('brand_name', isLessThan: name + 'z')
-                      .snapshots()
-                  : FirebaseFirestore.instance.collection("brand").snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  List<QueryDocumentSnapshot<Object?>> firestoreitems =
-                      snapshot.data!.docs;
-                  return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
+        child: StreamBuilder<QuerySnapshot>(
+            stream: (name != "")
+                ? FirebaseFirestore.instance
+                    .collection('users')
+                    .where('email', isGreaterThanOrEqualTo: name)
+                    .where('email', isLessThan: name + 'z')
+                    .snapshots()
+                : FirebaseFirestore.instance.collection("users").snapshots(),
+            builder: (context, snapshot) {
+              return (snapshot.connectionState == ConnectionState.waiting)
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
                       shrinkWrap: true,
-                      itemCount: firestoreitems.length,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data?.docs.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return BrandViewTile(
-                          image: firestoreitems[index]['image'],
-                          brandName: firestoreitems[index]['brand_name'],
+                        QueryDocumentSnapshot<Object?>? firestoreusers =
+                            snapshot.data?.docs[index];
+                        return UserTile(
+                          adminRole: firestoreusers!['adminrole'].toString(),
+                          email: firestoreusers['email'].toString(),
+                          name: firestoreusers['name'].toString(),
+                          phoneNumber: firestoreusers['phoneNumber'].toString(),
+                          role: firestoreusers['role'].toString(),
                           onTap: () {
-                            Get.to(() => BrandProducts(
-                                  title: firestoreitems[index]['brand_name']
-                                      .toString(),
-                                ));
+                            Get.to(SuperAdminUserEditPage(
+                              adminRole: firestoreusers['adminrole'].toString(),
+                              email: firestoreusers['email'].toString(),
+                              name: firestoreusers['name'].toString(),
+                              phoneNumber:
+                                  firestoreusers['phoneNumber'].toString(),
+                              role: firestoreusers['role'].toString(),
+                            ));
                           },
                         );
                       });
-                }
-                return const SizedBox();
-              }),
-        ),
+            }),
       ),
     );
   }

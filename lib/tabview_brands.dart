@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:captcha/search_brands.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'brand_products.dart';
-import '../tiles/brandview_tile.dart';
-import 'search_brands.dart';
+import 'tiles/brandview_tile.dart';
 
 class TabViewBrands extends StatefulWidget {
   const TabViewBrands({Key? key}) : super(key: key);

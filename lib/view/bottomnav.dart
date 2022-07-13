@@ -1,9 +1,9 @@
-import 'package:captcha/jutta.dart';
-import 'package:captcha/profile.dart';
-import 'package:captcha/search.dart';
 import 'package:flutter/material.dart';
 
 import 'cart.dart';
+import 'jutta.dart';
+import 'profile.dart';
+import 'search.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({

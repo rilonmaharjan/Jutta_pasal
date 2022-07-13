@@ -1,18 +1,18 @@
+import 'package:captcha/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'brand_products.dart';
-import '../tiles/brandview_tile.dart';
+import 'tiles/product_tile.dart';
 
-class SearchBrands extends StatefulWidget {
-  const SearchBrands({Key? key}) : super(key: key);
+class SearchProducts extends StatefulWidget {
+  const SearchProducts({Key? key}) : super(key: key);
 
   @override
-  State<SearchBrands> createState() => _SearchBrandsState();
+  State<SearchProducts> createState() => _SearchProductsState();
 }
 
-class _SearchBrandsState extends State<SearchBrands> {
+class _SearchProductsState extends State<SearchProducts> {
   final nameHolder = TextEditingController();
   clearTextInput() {
     nameHolder.clear();
@@ -64,8 +64,8 @@ class _SearchBrandsState extends State<SearchBrands> {
                 });
               },
               controller: nameHolder,
-              autofocus: true,
               textCapitalization: TextCapitalization.words,
+              autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                   prefixIcon: const Icon(
@@ -91,11 +91,13 @@ class _SearchBrandsState extends State<SearchBrands> {
           child: StreamBuilder<QuerySnapshot>(
               stream: (name != "")
                   ? FirebaseFirestore.instance
-                      .collection('brand')
-                      .where('brand_name', isGreaterThanOrEqualTo: name)
-                      .where('brand_name', isLessThan: name + 'z')
+                      .collection('products')
+                      .where('productName', isGreaterThanOrEqualTo: name)
+                      .where('productName', isLessThan: name + 'z')
                       .snapshots()
-                  : FirebaseFirestore.instance.collection("brand").snapshots(),
+                  : FirebaseFirestore.instance
+                      .collection("products")
+                      .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   const Center(
@@ -104,23 +106,28 @@ class _SearchBrandsState extends State<SearchBrands> {
                 } else {
                   List<QueryDocumentSnapshot<Object?>> firestoreitems =
                       snapshot.data!.docs;
-                  return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: firestoreitems.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BrandViewTile(
-                          image: firestoreitems[index]['image'],
-                          brandName: firestoreitems[index]['brand_name'],
-                          onTap: () {
-                            Get.to(() => BrandProducts(
-                                  title: firestoreitems[index]['brand_name']
-                                      .toString(),
-                                ));
-                          },
-                        );
-                      });
+                  return Wrap(
+                      children: List.generate(
+                          firestoreitems.length,
+                          ((index) => ProductTile(
+                                image: firestoreitems[index]['image'],
+                                title: firestoreitems[index]['productName'],
+                                desc: firestoreitems[index]['description'],
+                                price:
+                                    firestoreitems[index]['price'].toString(),
+                                discount: firestoreitems[index]['discount'],
+                                onTap: () {
+                                  Get.to(Order(
+                                    title: firestoreitems[index]['productName'],
+                                    price: firestoreitems[index]['price']
+                                        .toString(),
+                                    discount: firestoreitems[index]['discount'],
+                                    description: firestoreitems[index]
+                                        ['description'],
+                                    url: firestoreitems[index]['image'],
+                                  ));
+                                },
+                              ))));
                 }
                 return const SizedBox();
               }),

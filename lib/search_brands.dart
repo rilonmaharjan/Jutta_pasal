@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'brand_products.dart';
-import '../tiles/brandview_tile.dart';
+import 'tiles/brandview_tile.dart';
 
 class SearchBrands extends StatefulWidget {
   const SearchBrands({Key? key}) : super(key: key);
