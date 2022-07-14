@@ -1,4 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'order.dart';
+import 'tiles/cart_tile.dart';
 
 class Cart extends StatefulWidget {
   const Cart({
@@ -10,6 +16,7 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,47 +39,90 @@ class _CartState extends State<Cart> {
             ),
           ],
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 20),
-            child: const Icon(
-              Icons.delete_outline_outlined,
-              size: 24,
-            ),
-          ),
-        ],
+        // actions: [
+        //   GestureDetector(
+        //     onTap:  () => deleteAllFromCart(context),
+        //     child: Container(
+        //       margin: const EdgeInsets.only(right: 20),
+        //       child: const Icon(
+        //         Icons.delete_outline_outlined,
+        //         size: 24,
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(12.0),
-          color: const Color.fromARGB(255, 244, 246, 252),
-          height: MediaQuery.of(context).size.height - 147,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/logo1.png",
-                height: 150,
-                width: 150,
-              ),
-              const SizedBox(
-                height: 14,
-              ),
-              const Text(
-                "Add to your Shopping Cart",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    height: 1.5,
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 127, 129, 128)),
-              ),
-            ],
-          ),
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("cart")
+                .doc(user?.email)
+                .collection('products')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                    snapshot.data!.docs;
+                return Wrap(
+                    children: List.generate(
+                        firestoreitems.length,
+                        ((index) => CartTile(
+                              image: firestoreitems[index]['image'],
+                              title: firestoreitems[index]['productName'],
+                              desc: firestoreitems[index]['description'],
+                              price: firestoreitems[index]['price'].toString(),
+                              discount:
+                                  firestoreitems[index]['discount'].toString(),
+                              productID: firestoreitems[index]['productID'],
+                              onTap: () {
+                                Get.to(() => Order(
+                                      url: firestoreitems[index]['image'],
+                                      price: firestoreitems[index]['price']
+                                          .toString(),
+                                      title: firestoreitems[index]
+                                          ['productName'],
+                                      discount: firestoreitems[index]
+                                              ['discount']
+                                          .toString(),
+                                      description: firestoreitems[index]
+                                          ['description'],
+                                      brandStore: firestoreitems[index]
+                                          ['brand_store'],
+                                      category: firestoreitems[index]
+                                          ['category'],
+                                      offer: firestoreitems[index]['offer'],
+                                      productId: firestoreitems[index]
+                                          ['productID'],
+                                      type: firestoreitems[index]['type'],
+                                    ));
+                              },
+                            ))));
+              }
+            }),
       )),
     );
   }
+
+  // Future deleteAllFromCart(context) async {
+  //   showDialog(
+  //       context: context,
+  //       barrierDismissible: false,
+  //       builder: (context) => const Center(
+  //             child: CircularProgressIndicator(),
+  //           ));
+
+  //   FirebaseFirestore.instance
+  //       .collection('cart')
+  //       .doc(user!.email)
+  //       .delete()
+  //       .then(((value) => Get.back()))
+  //       .then((value) => Get.snackbar('Deleted', 'Successfully Deleted',
+  //           duration: const Duration(milliseconds: 2000),
+  //           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494)));
+  // }
 }

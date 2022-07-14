@@ -68,6 +68,12 @@ dependencies:
   #font awesom icon
   font_awesome_flutter: ^10.1.0
 
+  #loading while scrolling
+  pull_to_refresh: ^2.0.0
+
+  #stickyheader
+  sticky_headers: ^0.3.0
+
 
 dev_dependencies:
   flutter_test:

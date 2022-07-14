@@ -35,7 +35,7 @@ class _AllState extends State<All> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 2.0, left: 8, right: 8, bottom: 5),
+                        top: 10.0, left: 8, right: 8, bottom: 5),
                     child: Row(
                       children: [
                         const Text(
@@ -61,35 +61,48 @@ class _AllState extends State<All> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 240,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return OfferTile(
-                            image: firestoreitems[index]['image'],
-                            title: firestoreitems[index]['productName'],
-                            desc: firestoreitems[index]['description'],
-                            price: firestoreitems[index]['price'].toString(),
-                            discount:
-                                firestoreitems[index]['discount'].toString(),
-                            onTap: () {
-                              Get.to(() => Order(
-                                    url: firestoreitems[index]['image'],
-                                    price: firestoreitems[index]['price']
-                                        .toString(),
-                                    title: firestoreitems[index]['productName'],
-                                    discount: firestoreitems[index]['discount']
-                                        .toString(),
-                                    description: firestoreitems[index]
-                                        ['description'],
-                                  ));
-                            },
-                          );
-                        }),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 240,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return OfferTile(
+                              image: firestoreitems[index]['image'],
+                              title: firestoreitems[index]['productName'],
+                              desc: firestoreitems[index]['description'],
+                              price: firestoreitems[index]['price'].toString(),
+                              discount:
+                                  firestoreitems[index]['discount'].toString(),
+                              onTap: () {
+                                Get.to(() => Order(
+                                      url: firestoreitems[index]['image'],
+                                      price: firestoreitems[index]['price']
+                                          .toString(),
+                                      title: firestoreitems[index]
+                                          ['productName'],
+                                      discount: firestoreitems[index]
+                                              ['discount']
+                                          .toString(),
+                                      description: firestoreitems[index]
+                                          ['description'],
+                                      brandStore: firestoreitems[index]
+                                          ['brand_store'],
+                                      category: firestoreitems[index]
+                                          ['category'],
+                                      offer: firestoreitems[index]['offer'],
+                                      productId: firestoreitems[index]
+                                          ['productID'],
+                                      type: firestoreitems[index]['type'],
+                                    ));
+                              },
+                            );
+                          }),
+                    ),
                   ),
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -209,6 +222,16 @@ class _AllState extends State<All> {
                                                   .toString(),
                                               description: firestoreitems[index]
                                                   ['description'],
+                                              brandStore: firestoreitems[index]
+                                                  ['brand_store'],
+                                              category: firestoreitems[index]
+                                                  ['category'],
+                                              offer: firestoreitems[index]
+                                                  ['offer'],
+                                              productId: firestoreitems[index]
+                                                  ['productID'],
+                                              type: firestoreitems[index]
+                                                  ['type'],
                                             ));
                                       },
                                     ))));

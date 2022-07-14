@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                               fontSize: 15.5,
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 130, 137, 247)),
+                              color: Color.fromARGB(255, 0, 0, 0)),
                         )),
                     TextButton(
                         onPressed: () => Navigator.pop(context, false),
@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                               fontSize: 15.5,
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 130, 137, 247)),
+                              color: Color.fromARGB(255, 0, 0, 0)),
                         )),
                   ],
                 ));

@@ -1,6 +1,8 @@
 import 'package:captcha/jutta.dart';
 import 'package:captcha/profile.dart';
 import 'package:captcha/search.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'cart.dart';
@@ -18,6 +20,7 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
+  final user = FirebaseAuth.instance.currentUser;
   List pages = [
     const Jutta(),
 
@@ -55,24 +58,61 @@ class _BottomNavState extends State<BottomNav> {
         selectedItemColor: Colors.black,
         iconSize: 26,
         selectedFontSize: 12,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
             ),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(
                 Icons.search_outlined,
               ),
               label: 'Search'),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-              ),
+              icon: Stack(children: [
+                const Icon(
+                  Icons.shopping_cart_outlined,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 18),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("cart")
+                          .doc(user!.email)
+                          .collection('products')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                              snapshot.data!.docs;
+                          return Container(
+                            padding: const EdgeInsets.all(2),
+                            width: 17,
+                            height: 17,
+                            decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 253, 228, 213),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            child: Text(
+                              firestoreitems.length.toString(),
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 8, 8, 8),
+                                  fontSize: 12),
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }
+                      }),
+                ),
+              ]),
               label: 'Basket'),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(
                 Icons.person_outline,
               ),

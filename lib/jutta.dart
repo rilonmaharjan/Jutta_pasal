@@ -52,58 +52,71 @@ class _KhanaState extends State<Jutta> {
     final user = FirebaseAuth.instance.currentUser;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.black, size: 25),
+        actionsIconTheme: const IconThemeData(color: Colors.black, size: 28),
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        title: Row(
+          children: [
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .where('email', isEqualTo: user!.email)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Text(
+                      'No User Data...',
+                    );
+                  } else {
+                    List<QueryDocumentSnapshot<Object?>> firestoreItems =
+                        snapshot.data!.docs;
+                    var fname = firestoreItems[0]['name'].split(" ");
+                    return Text(
+                      "HELLO,  " + fname[0].toString().toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  }
+                }),
+          ],
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 20),
+            child: const Icon(
+              Icons.message,
+              color: Color.fromARGB(255, 65, 65, 65),
+              size: 24,
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Stack(
           children: [
-            Align(
-              alignment: Alignment.topCenter,
+            SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  Container(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(top: 58),
+                    width: MediaQuery.of(context).size.width,
+                    child: swtichfunction(),
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection("users")
-                              .where('email', isEqualTo: user!.email)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Text(
-                                'No User Data...',
-                              );
-                            } else {
-                              List<QueryDocumentSnapshot<Object?>>
-                                  firestoreItems = snapshot.data!.docs;
-                              var fname = firestoreItems[0]['name'].split(" ");
-                              return Text(
-                                "HELLO,  " + fname[0].toString().toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              );
-                            }
-                          }),
-                      const Spacer(),
-                      Image.asset(
-                        "assets/images/hh.png",
-                        width: 45,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  SizedBox(
+                ],
+              ),
+            ),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                  child: SizedBox(
                     width: size.width,
                     height: 35,
                     child: ListView.builder(
@@ -129,17 +142,7 @@ class _KhanaState extends State<Jutta> {
                           );
                         }),
                   ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height - 205,
-                    width: MediaQuery.of(context).size.width,
-                    child: swtichfunction(),
-                  )
-                ],
-              ),
-            ),
+                )),
             Padding(
               padding: const EdgeInsets.only(right: 20.0, bottom: 20),
               child: Align(

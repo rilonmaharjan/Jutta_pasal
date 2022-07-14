@@ -1,43 +1,39 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class OfferTile extends StatefulWidget {
-  final image, desc, title, price, discount;
+class CartTile extends StatefulWidget {
+  final image, desc, title, price, discount, productID;
   final VoidCallback? onTap;
-  const OfferTile(
+  const CartTile(
       {Key? key,
       this.image,
       this.title,
       this.price,
       this.discount,
       this.desc,
+      required this.productID,
       this.onTap})
       : super(key: key);
 
   @override
-  State<OfferTile> createState() => _AdminProductsState();
+  State<CartTile> createState() => _AdminProductsState();
 }
 
-class _AdminProductsState extends State<OfferTile> {
+class _AdminProductsState extends State<CartTile> {
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: widget.onTap,
-        child: Container(
-          margin:
-              const EdgeInsets.only(left: 4.0, top: 10, bottom: 10, right: 4),
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 248, 248, 248),
-              boxShadow: [
-                BoxShadow(
-                    color: Color.fromARGB(255, 230, 229, 229),
-                    offset: Offset(2, 2),
-                    blurRadius: 5)
-              ]),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, top: 10, bottom: 10),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width / 1.6,
+            width: MediaQuery.of(context).size.width / 2.125,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,22 +41,21 @@ class _AdminProductsState extends State<OfferTile> {
                   children: [
                     CachedNetworkImage(
                       imageUrl: widget.image,
-                      width: MediaQuery.of(context).size.width / 1.6,
-                      height: 130,
+                      width: MediaQuery.of(context).size.width / 2.125,
                       fit: BoxFit.cover,
                     ),
                     widget.discount.isEmpty
                         ? const SizedBox()
                         : Align(
-                            alignment: Alignment.topRight,
+                            alignment: Alignment.topLeft,
                             child: Container(
                               width: 55,
                               padding: const EdgeInsets.only(top: 5, bottom: 5),
                               decoration: const BoxDecoration(
                                   color: Color.fromARGB(255, 36, 36, 36),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30),
-                                      bottomLeft: Radius.circular(30))),
+                                      topRight: Radius.circular(30),
+                                      bottomRight: Radius.circular(30))),
                               child: Text(
                                 "- " + widget.discount + "  %",
                                 textAlign: TextAlign.center,
@@ -71,6 +66,15 @@ class _AdminProductsState extends State<OfferTile> {
                               ),
                             ),
                           ),
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () => deletefromcart(context),
+                          child: const Padding(
+                            padding: EdgeInsets.only(top: 10, right: 10),
+                            child: Icon(Icons.delete_outline),
+                          ),
+                        )),
                   ],
                 ),
                 Padding(
@@ -153,5 +157,18 @@ class _AdminProductsState extends State<OfferTile> {
             ),
           ),
         ));
+  }
+
+  Future deletefromcart(context) async {
+    FirebaseFirestore.instance
+        .collection('cart')
+        .doc(user!.email)
+        .collection('products')
+        .doc(widget.productID)
+        .delete()
+        .then(((value) => Get.back()))
+        .then((value) => Get.snackbar('Deleted', 'Successfully Deleted',
+            duration: const Duration(milliseconds: 2000),
+            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494)));
   }
 }

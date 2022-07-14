@@ -347,6 +347,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                       },
                                       items: <String>[
                                         "Category",
+                                        'All',
                                         'Men',
                                         'Women',
                                         'Kids',

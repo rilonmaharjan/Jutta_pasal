@@ -125,6 +125,13 @@ class _SearchProductsState extends State<SearchProducts> {
                                     description: firestoreitems[index]
                                         ['description'],
                                     url: firestoreitems[index]['image'],
+                                    brandStore: firestoreitems[index]
+                                        ['brand_store'],
+                                    category: firestoreitems[index]['category'],
+                                    offer: firestoreitems[index]['offer'],
+                                    productId: firestoreitems[index]
+                                        ['productID'],
+                                    type: firestoreitems[index]['type'],
                                   ));
                                 },
                               ))));

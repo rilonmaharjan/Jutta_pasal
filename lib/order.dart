@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 
 class Order extends StatefulWidget {
   final url;
@@ -12,6 +14,11 @@ class Order extends StatefulWidget {
   final price;
   final discount;
   final description;
+  final brandStore;
+  final category;
+  final offer;
+  final productId;
+  final type;
 
   const Order({
     Key? key,
@@ -20,6 +27,11 @@ class Order extends StatefulWidget {
     required this.title,
     required this.discount,
     required this.description,
+    required this.brandStore,
+    required this.category,
+    required this.offer,
+    required this.productId,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -411,7 +423,7 @@ class _OrderState extends State<Order> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: addtocart,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
@@ -486,5 +498,45 @@ class _OrderState extends State<Order> {
         ),
       ),
     );
+  }
+
+  Future addtocart() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      DocumentReference documentReferencer = FirebaseFirestore.instance
+          .collection('cart')
+          .doc(user!.email)
+          .collection('products')
+          .doc(widget.productId);
+      Map<String, dynamic> data = <String, dynamic>{
+        'brand_store': widget.brandStore,
+        'productName': widget.title,
+        'description': widget.description,
+        'price': widget.price,
+        'discount': widget.discount,
+        'image': widget.url,
+        'productID': widget.productId,
+        'category': widget.category,
+        'offer': widget.offer,
+        'type': widget.type,
+      };
+
+      await documentReferencer
+          .set(data)
+          .then((value) => Navigator.pop(context))
+          .then((value) => Get.snackbar("Added", "Item added to cart",
+              duration: const Duration(milliseconds: 2000),
+              backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+    } on FirebaseException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255));
+    }
   }
 }
