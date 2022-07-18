@@ -1,5 +1,6 @@
 import 'package:captcha/categories/casual.dart';
 import 'package:captcha/categories/classic.dart';
+import 'package:captcha/colour_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -88,10 +89,27 @@ class _KhanaState extends State<Jutta> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 20),
-            child: const Icon(
-              Icons.message,
-              color: Color.fromARGB(255, 65, 65, 65),
-              size: 24,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const ColorView());
+                  },
+                  child: const Icon(
+                    Icons.color_lens_outlined,
+                    color: Color.fromARGB(255, 65, 65, 65),
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                const Icon(
+                  Icons.message,
+                  color: Color.fromARGB(255, 65, 65, 65),
+                  size: 24,
+                ),
+              ],
             ),
           ),
         ],
@@ -100,15 +118,10 @@ class _KhanaState extends State<Jutta> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    margin: const EdgeInsets.only(top: 58),
-                    width: MediaQuery.of(context).size.width,
-                    child: swtichfunction(),
-                  ),
-                ],
+              child: Container(
+                margin: const EdgeInsets.only(top: 58),
+                width: MediaQuery.of(context).size.width,
+                child: swtichfunction(),
               ),
             ),
             Align(

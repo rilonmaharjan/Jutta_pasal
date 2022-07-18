@@ -1,8 +1,10 @@
 import 'package:captcha/offer.dart';
 import 'package:captcha/tiles/brand_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_count_down/date_count_down.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../brand_products.dart';
 import '../order.dart';
@@ -37,26 +39,45 @@ class _AllState extends State<All> {
                     padding: const EdgeInsets.only(
                         top: 10.0, left: 8, right: 8, bottom: 5),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Offer",
                           style: TextStyle(fontSize: 16),
                         ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => const Offer());
-                          },
-                          child: const Text(
-                            "View More",
-                          ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Ends In : ",
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            CountDownText(
+                              due: DateTime.parse("2022-08-20 00:00:00"),
+                              finishedText: "Ended",
+                              showLabel: true,
+                              longDateName: false,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 15,
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => const Offer());
+                              },
+                              child: const Text(
+                                "View More",
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                            )
+                          ],
                         )
                       ],
                     ),

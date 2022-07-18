@@ -1,10 +1,10 @@
-import 'package:captcha/admin_edit_page.dart';
-import 'package:captcha/tiles/admin_product_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'admin_upload_page.dart';
+import '../admin_view/admin_upload_page.dart';
+import '../tiles/admin_product_tile.dart';
+import 'admin_edit_page.dart';
 
 class VendorAdminViewPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -148,6 +148,8 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                                             offer: firestoreitems[index]
                                                 ['offer'],
                                             type: firestoreitems[index]['type'],
+                                            color: firestoreitems[index]
+                                                ['color'],
                                           ));
                                         },
                                       )

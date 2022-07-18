@@ -22,7 +22,8 @@ class AdminEditPage extends StatefulWidget {
       image,
       productID,
       offer,
-      type;
+      type,
+      color;
   const AdminEditPage(
       {Key? key,
       required this.brandEditName,
@@ -34,7 +35,8 @@ class AdminEditPage extends StatefulWidget {
       required this.category,
       required this.productID,
       required this.offer,
-      required this.type})
+      required this.type,
+      required this.color})
       : super(key: key);
 
   @override
@@ -48,12 +50,14 @@ class _AdminPageState extends State<AdminEditPage> {
   var dropDownCategory = "Category";
   var dropDownOffer = "Offer";
   var dropDownType = "Type";
+  var dropDownColor = "Color";
 
   @override
   void initState() {
     dropDownCategory = widget.category;
     dropDownOffer = widget.offer;
     dropDownType = widget.type;
+    dropDownColor = widget.color;
     brandController.text = widget.brandEditName;
     titleController.text = widget.title;
     categoryController.text = widget.category;
@@ -205,12 +209,22 @@ class _AdminPageState extends State<AdminEditPage> {
                                         );
                                       }).toList(),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
                                     DropdownButton<String>(
                                       value: dropDownType,
                                       icon: const Icon(Icons.arrow_downward),
                                       elevation: 16,
                                       style: const TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                        color: Colors.deepPurpleAccent,
+                                      ),
                                       underline: Container(
                                         height: 2,
                                         color: Colors.deepPurpleAccent,
@@ -225,6 +239,37 @@ class _AdminPageState extends State<AdminEditPage> {
                                         'Sports',
                                         'Classic',
                                         'Casual'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownColor,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownColor = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Color",
+                                        "No Specific",
+                                        "Red",
+                                        "Black",
+                                        "Blue",
+                                        "White",
+                                        "Yellow"
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
@@ -298,6 +343,9 @@ class _AdminPageState extends State<AdminEditPage> {
                                 const SizedBox(
                                   height: 15,
                                 ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -357,6 +405,13 @@ class _AdminPageState extends State<AdminEditPage> {
                                         );
                                       }).toList(),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
                                     DropdownButton<String>(
                                       value: dropDownType,
                                       icon: const Icon(Icons.arrow_downward),
@@ -385,7 +440,41 @@ class _AdminPageState extends State<AdminEditPage> {
                                         );
                                       }).toList(),
                                     ),
+                                    DropdownButton<String>(
+                                      value: dropDownColor,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownColor = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Color",
+                                        "No Specific",
+                                        "Red",
+                                        "Black",
+                                        "Blue",
+                                        "White",
+                                        "Yellow"
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -461,6 +550,7 @@ class _AdminPageState extends State<AdminEditPage> {
           'category': dropDownCategory.trim(),
           'offer': dropDownOffer.trim(),
           'type': dropDownType.trim(),
+          'color': dropDownColor.trim(),
         };
         await documentReferencer
             .update(data)
@@ -503,6 +593,7 @@ class _AdminPageState extends State<AdminEditPage> {
             'category': dropDownCategory.trim(),
             'offer': dropDownOffer.trim(),
             'type': dropDownType.trim(),
+            'color': dropDownColor.trim(),
           };
           await documentReferencer
               .update(data)

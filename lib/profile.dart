@@ -76,11 +76,27 @@ class _ProfileState extends State<Profile> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
-                                  firestoreItems[0]['email'],
-                                  style: const TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 138, 137, 137)),
+                                Row(
+                                  children: [
+                                    Text(
+                                      firestoreItems[0]['email'],
+                                      style: const TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 138, 137, 137)),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "Contact :" +
+                                          firestoreItems[0]['phoneNumber'],
+                                      style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color.fromARGB(
+                                              255, 138, 137, 137)),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    )
+                                  ],
                                 ),
                               ],
                             ),

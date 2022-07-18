@@ -168,7 +168,7 @@ class _AdminProductsState extends State<CartTile> {
         .delete()
         .then(((value) => Get.back()))
         .then((value) => Get.snackbar('Deleted', 'Successfully Deleted',
-            duration: const Duration(milliseconds: 2000),
+            duration: const Duration(milliseconds: 1500),
             backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494)));
   }
 }

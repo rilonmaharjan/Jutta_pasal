@@ -17,7 +17,8 @@ class _BrandTileState extends State<BrandTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      child: Padding(
+      child: Container(
+        color: Colors.white,
         padding: const EdgeInsets.only(left: 4, right: 4),
         child: Stack(
           children: [
@@ -36,7 +37,7 @@ class _BrandTileState extends State<BrandTile> {
             Container(
               width: MediaQuery.of(context).size.width / 1.6,
               decoration:
-                  const BoxDecoration(color: Color.fromARGB(26, 0, 0, 0)),
+                  const BoxDecoration(color: Color.fromARGB(34, 0, 0, 0)),
             ),
           ],
         ),

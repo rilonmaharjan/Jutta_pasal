@@ -25,6 +25,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
   var dropDownCategory = "Category";
   var dropDownOffer = "Offer";
   var dropDownType = "Type";
+  var dropDownColor = "Color";
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -157,6 +158,9 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                 const SizedBox(
                                   height: 15,
                                 ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -216,12 +220,22 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                         );
                                       }).toList(),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
                                     DropdownButton<String>(
                                       value: dropDownType,
                                       icon: const Icon(Icons.arrow_downward),
                                       elevation: 16,
                                       style: const TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                        color: Colors.deepPurpleAccent,
+                                      ),
                                       underline: Container(
                                         height: 2,
                                         color: Colors.deepPurpleAccent,
@@ -236,6 +250,37 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                         'Sports',
                                         'Classic',
                                         'Casual'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownColor,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownColor = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Color",
+                                        "No Specific",
+                                        "Red",
+                                        "Black",
+                                        "Blue",
+                                        "White",
+                                        "Yellow"
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
@@ -326,6 +371,9 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                 const SizedBox(
                                   height: 15,
                                 ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -347,7 +395,6 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                       },
                                       items: <String>[
                                         "Category",
-                                        'All',
                                         'Men',
                                         'Women',
                                         'Kids',
@@ -386,12 +433,22 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                         );
                                       }).toList(),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
                                     DropdownButton<String>(
                                       value: dropDownType,
                                       icon: const Icon(Icons.arrow_downward),
                                       elevation: 16,
                                       style: const TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                        color: Colors.deepPurpleAccent,
+                                      ),
                                       underline: Container(
                                         height: 2,
                                         color: Colors.deepPurpleAccent,
@@ -406,6 +463,37 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                                         'Sports',
                                         'Classic',
                                         'Casual'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropDownColor,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropDownColor = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "Color",
+                                        "No Specific",
+                                        "Red",
+                                        "Black",
+                                        "Blue",
+                                        "White",
+                                        "Yellow"
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
@@ -488,6 +576,12 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494));
     }
 
+    if (dropDownColor == "Color") {
+      return Get.snackbar('Colour Required', "Please insert the colour",
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494));
+    }
+
     if (dropDownType == "Type") {
       return Get.snackbar('Type Required', "Please insert the type",
           duration: const Duration(milliseconds: 2000),
@@ -530,6 +624,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
             'category': dropDownCategory.trim(),
             'offer': dropDownOffer.trim(),
             'type': dropDownType.trim(),
+            'color': dropDownColor.trim(),
           };
           await documentReferencer
               .set(data)

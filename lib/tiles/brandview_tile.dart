@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 class BrandViewTile extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final image, brandName;
+  final image, logo;
   final VoidCallback onTap;
-  const BrandViewTile(
-      {Key? key, required this.onTap, this.image, this.brandName})
+  const BrandViewTile({Key? key, required this.onTap, this.image, this.logo})
       : super(key: key);
 
   @override
@@ -33,18 +32,16 @@ class _BrandViewTileState extends State<BrandViewTile> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
+              height: 182,
               decoration:
-                  const BoxDecoration(color: Color.fromARGB(137, 0, 0, 0)),
+                  const BoxDecoration(color: Color.fromARGB(88, 185, 185, 185)),
               child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  widget.brandName,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.logo,
+                    height: 110,
+                    width: 110,
+                  )),
             ),
           ],
         ),

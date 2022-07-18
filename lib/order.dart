@@ -146,15 +146,39 @@ class _OrderState extends State<Order> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(9),
-                        child: CachedNetworkImage(
-                          fadeInDuration: const Duration(milliseconds: 0),
-                          imageUrl: widget.url,
-                          height: 200,
-                          width: MediaQuery.of(context).size.width - 60,
-                          fit: BoxFit.cover,
-                        )),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: InteractiveViewer(
+                              child: AlertDialog(
+                                  titlePadding: const EdgeInsets.all(0),
+                                  title: CachedNetworkImage(
+                                    fadeInDuration:
+                                        const Duration(milliseconds: 0),
+                                    imageUrl: widget.url,
+                                    height: 300,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.cover,
+                                  )),
+                            ),
+                          ),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(9),
+                          child: CachedNetworkImage(
+                            fadeInDuration: const Duration(milliseconds: 0),
+                            imageUrl: widget.url,
+                            height: 200,
+                            width: MediaQuery.of(context).size.width - 60,
+                            fit: BoxFit.cover,
+                          )),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -411,7 +435,7 @@ class _OrderState extends State<Order> {
                     ),
                     const Spacer(),
                     Text(
-                      "Rs. ${(100 + total) - (100 + total) * ((discountPercent) / 100)}",
+                      "Rs. ${((total) - (total) * ((discountPercent) / 100)) + 100}",
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -430,17 +454,16 @@ class _OrderState extends State<Order> {
                           Icon(
                             Icons.shopping_cart,
                             size: 18,
-                            color: Color.fromARGB(255, 99, 98, 98),
+                            color: Color.fromARGB(255, 238, 238, 238),
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            "Add to Cart",
-                            style: TextStyle(
+                          Text("Add to Cart",
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Color.fromARGB(255, 99, 98, 98)),
-                          ),
+                                color: Color.fromARGB(255, 238, 238, 238),
+                              )),
                         ],
                       ),
                       style: ElevatedButton.styleFrom(
@@ -450,8 +473,8 @@ class _OrderState extends State<Order> {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w600),
-                          primary: const Color.fromARGB(255, 255, 255, 255),
-                          onPrimary: Colors.black),
+                          onPrimary: const Color.fromARGB(255, 184, 183, 183),
+                          primary: Colors.black),
                     ),
                     const SizedBox(
                       width: 20,
@@ -464,17 +487,16 @@ class _OrderState extends State<Order> {
                           Icon(
                             Icons.shop,
                             size: 18,
-                            color: Color.fromARGB(255, 99, 98, 98),
+                            color: Color.fromARGB(255, 238, 238, 238),
                           ),
                           SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "Buy Now",
-                            style: TextStyle(
+                          Text("Buy Now",
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Color.fromARGB(255, 99, 98, 98)),
-                          ),
+                                color: Color.fromARGB(255, 238, 238, 238),
+                              )),
                         ],
                       ),
                       style: ElevatedButton.styleFrom(
@@ -484,8 +506,8 @@ class _OrderState extends State<Order> {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w600),
-                          primary: const Color.fromARGB(255, 255, 255, 255),
-                          onPrimary: Colors.black),
+                          onPrimary: const Color.fromARGB(255, 184, 183, 183),
+                          primary: Colors.black),
                     ),
                   ],
                 ),

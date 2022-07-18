@@ -68,11 +68,20 @@ dependencies:
   #font awesom icon
   font_awesome_flutter: ^10.1.0
 
-  #loading while scrolling
+  #loading 
   pull_to_refresh: ^2.0.0
 
   #stickyheader
   sticky_headers: ^0.3.0
+
+  #carasol slider
+  flutter_carousel_slider: ^1.0.8
+
+  #for date
+  date_count_down: ^2.1.0
+
+  #pagination
+  pagination_view: ^2.0.0-nullsafety.0
 
 
 dev_dependencies:
