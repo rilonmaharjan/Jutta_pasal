@@ -28,11 +28,16 @@ class _SearchViewState extends State<SearchView> {
             elevation: 0.0,
             automaticallyImplyLeading: false,
             title: const Padding(
-              padding: EdgeInsets.only(left: 8.0, top: 20),
-              child: Text("Search Items"),
+              padding: EdgeInsets.only(left: 8.0, top: 0),
+              child: Text(
+                "Search Items",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ),
-            titleTextStyle: const TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
             bottom: const TabBar(
                 indicatorColor: Colors.black,
                 unselectedLabelColor: Color.fromARGB(255, 138, 137, 137),
@@ -42,8 +47,9 @@ class _SearchViewState extends State<SearchView> {
                     child: Text(
                       "Shoes",
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
                         fontSize: 17,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
@@ -51,8 +57,11 @@ class _SearchViewState extends State<SearchView> {
                     padding: EdgeInsets.all(10),
                     child: Text(
                       "Brands",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ]),

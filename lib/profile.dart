@@ -1,9 +1,15 @@
+import 'package:captcha/change_password.dart';
+import 'package:captcha/notification.dart';
+import 'package:captcha/permissions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'provider/google_sign_in.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -14,6 +20,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final user = FirebaseAuth.instance.currentUser;
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +50,214 @@ class _ProfileState extends State<Profile> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("users")
+                        .where('email', isEqualTo: user!.email)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Text(
+                          'No User Data...',
+                        );
+                      } else {
+                        List<QueryDocumentSnapshot<Object?>> firestoreItems =
+                            snapshot.data!.docs;
+                        nameController.text = firestoreItems[0]['name'];
+                        phoneController.text = firestoreItems[0]['phoneNumber'];
+                        return GestureDetector(
+                          onTap: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Form(
+                                  key: formKey,
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "Edit Info",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      TextFormField(
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        controller: nameController,
+                                        decoration: const InputDecoration(
+                                          hintText: "Full Name",
+                                        ),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        validator: (contact) => contact!.isEmpty
+                                            ? "Contact cannot be empty."
+                                            : null,
+                                      ),
+                                      firestoreItems[0]['phoneNumber'] == ""
+                                          ? const SizedBox()
+                                          : TextFormField(
+                                              textCapitalization:
+                                                  TextCapitalization.words,
+                                              controller: phoneController,
+                                              decoration: const InputDecoration(
+                                                hintText: "Phone Number",
+                                              ),
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              validator: (contact) => contact!
+                                                      .isEmpty
+                                                  ? "Contact cannot be empty."
+                                                  : null,
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                content: ElevatedButton(
+                                  onPressed: () {
+                                    updateProfile(context);
+                                  },
+                                  child: const Text("Save",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color:
+                                            Color.fromARGB(255, 238, 238, 238),
+                                      )),
+                                  style: ElevatedButton.styleFrom(
+                                      fixedSize: const Size(150, 40),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      textStyle: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                      onPrimary: const Color.fromARGB(
+                                          255, 184, 183, 183),
+                                      primary: Colors.black),
+                                ),
+                                contentPadding: const EdgeInsets.only(
+                                    left: 24, right: 24, bottom: 12, top: 35),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.only(
+                                top: 21, bottom: 18, left: 20),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromARGB(255, 235, 233, 233),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 10)
+                                ]),
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      firestoreItems[0]['name'],
+                                      style: const TextStyle(fontSize: 17),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    Text(
+                                      firestoreItems[0]['email'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 138, 137, 137)),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    firestoreItems[0]['phoneNumber'] == ""
+                                        ? const SizedBox()
+                                        : Text(
+                                            "Contact :" +
+                                                firestoreItems[0]
+                                                    ['phoneNumber'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Color.fromARGB(
+                                                    255, 138, 137, 137)),
+                                          ),
+                                    const SizedBox(
+                                      width: 20,
+                                    )
+                                  ],
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                  color: Color.fromARGB(255, 121, 120, 120),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }),
+                const SizedBox(
+                  height: 7,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const Notificason());
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(top: 21, bottom: 18),
+                    decoration:
+                        const BoxDecoration(color: Colors.white, boxShadow: [
+                      BoxShadow(
+                          color: Color.fromARGB(255, 235, 233, 233),
+                          offset: Offset(2, 2),
+                          blurRadius: 10)
+                    ]),
+                    child: Row(
+                      children: const [
+                        SizedBox(
+                          width: 18,
+                        ),
+                        Icon(
+                          Icons.notifications,
+                          color: Color.fromARGB(255, 121, 120, 120),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text("Notifications", style: TextStyle(fontSize: 16)),
+                        Spacer(),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: Color.fromARGB(255, 121, 120, 120),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(top: 21, bottom: 18),
@@ -51,58 +268,120 @@ class _ProfileState extends State<Profile> {
                         offset: Offset(2, 2),
                         blurRadius: 10)
                   ]),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection("users")
-                          .where('email', isEqualTo: user!.email)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Text(
-                            'No User Data...',
-                          );
-                        } else {
-                          List<QueryDocumentSnapshot<Object?>> firestoreItems =
-                              snapshot.data!.docs;
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 18),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  firestoreItems[0]['name'],
-                                  style: const TextStyle(fontSize: 17),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      firestoreItems[0]['email'],
-                                      style: const TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 138, 137, 137)),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      "Contact :" +
-                                          firestoreItems[0]['phoneNumber'],
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 138, 137, 137)),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    )
-                                  ],
-                                ),
-                              ],
+                  child: Column(
+                    children: [
+                      Row(
+                        children: const [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "Accounts",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 92, 92, 92)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        indent: 13,
+                        endIndent: 13,
+                        thickness: 0.3,
+                        color: Color.fromARGB(255, 199, 199, 199),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.snackbar('Sorry', 'Not Available At the moment',
+                              duration: const Duration(milliseconds: 2000),
+                              backgroundColor:
+                                  const Color.fromARGB(126, 255, 255, 255));
+                        },
+                        child: Row(
+                          children: const [
+                            SizedBox(
+                              width: 18,
                             ),
-                          );
-                        }
-                      }),
+                            Icon(
+                              Icons.business_rounded,
+                              color: Color.fromARGB(255, 121, 120, 120),
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Text("Business Profile",
+                                style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection("users")
+                              .where('email', isEqualTo: user!.email)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Text(
+                                'No User Data...',
+                              );
+                            } else {
+                              List<QueryDocumentSnapshot<Object?>>
+                                  firestoreItems = snapshot.data!.docs;
+                              return firestoreItems[0]['phoneNumber'] == ""
+                                  ? const SizedBox()
+                                  : Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        const Divider(
+                                          indent: 13,
+                                          endIndent: 13,
+                                          thickness: 0.3,
+                                          color: Color.fromARGB(
+                                              255, 199, 199, 199),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(
+                                                () => const ChangePassword());
+                                          },
+                                          child: Row(
+                                            children: const [
+                                              SizedBox(
+                                                width: 18,
+                                              ),
+                                              Icon(
+                                                Icons.security,
+                                                color: Color.fromARGB(
+                                                    255, 121, 120, 120),
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text("Security",
+                                                  style:
+                                                      TextStyle(fontSize: 16)),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                            }
+                          }),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 7,
@@ -132,38 +411,6 @@ class _ProfileState extends State<Profile> {
                                 color: Color.fromARGB(255, 92, 92, 92)),
                           ),
                         ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Divider(
-                        indent: 13,
-                        endIndent: 13,
-                        thickness: 0.3,
-                        color: Color.fromARGB(255, 199, 199, 199),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 18,
-                            ),
-                            Icon(
-                              Icons.notifications,
-                              color: Color.fromARGB(255, 121, 120, 120),
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text("Notifications",
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -214,7 +461,9 @@ class _ProfileState extends State<Profile> {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(() => const Permissions());
+                        },
                         child: Row(
                           children: const [
                             SizedBox(
@@ -311,7 +560,11 @@ class _ProfileState extends State<Profile> {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          String googlePlayLaunch =
+                              "market://details?id=com.westbund.heros";
+                          launchUrl(Uri.parse(googlePlayLaunch));
+                        },
                         child: Row(
                           children: const [
                             SizedBox(
@@ -382,16 +635,19 @@ class _ProfileState extends State<Profile> {
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                               title: const Text(
-                                "Juuta Pasal.",
+                                "Jutta has developed to incorporate many superb takeout areas in Kathmandu with additional to come sooner rather than later. Our group takes pride in the way that we can furnish our new and faithful clients with extraordinary International brands that is not normal for that at some other Nepali shops you visit. Just sit back, relax and wait for your order to arrive.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
                                     color: Color.fromARGB(255, 151, 150, 150)),
                               ),
-                              content: Image.asset("assets/images/logo1.png"),
+                              content: Image.asset(
+                                "assets/images/logo1.png",
+                                height: 20,
+                              ),
                               contentPadding: const EdgeInsets.only(
-                                  left: 24, right: 24, bottom: 12, top: 8),
+                                  left: 24, right: 24, bottom: 12, top: 20),
                             ),
                           );
                         },
@@ -418,95 +674,39 @@ class _ProfileState extends State<Profile> {
                 const SizedBox(
                   height: 7,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(top: 21, bottom: 18),
-                  decoration:
-                      const BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(255, 235, 233, 233),
-                        offset: Offset(2, 2),
-                        blurRadius: 10)
-                  ]),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: const [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            "Accounts",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 92, 92, 92)),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Divider(
-                        indent: 13,
-                        endIndent: 13,
-                        thickness: 0.3,
-                        color: Color.fromARGB(255, 199, 199, 199),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 18,
-                            ),
-                            Icon(
-                              Icons.security,
-                              color: Color.fromARGB(255, 121, 120, 120),
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text("Security", style: TextStyle(fontSize: 16)),
-                          ],
+                GestureDetector(
+                  onTap: () {
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
+                    provider.googleLogout();
+                    FirebaseAuth.instance.signOut();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(top: 21, bottom: 18),
+                    decoration:
+                        const BoxDecoration(color: Colors.white, boxShadow: [
+                      BoxShadow(
+                          color: Color.fromARGB(255, 235, 233, 233),
+                          offset: Offset(2, 2),
+                          blurRadius: 10)
+                    ]),
+                    child: Row(
+                      children: const [
+                        SizedBox(
+                          width: 18,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Divider(
-                        indent: 13,
-                        endIndent: 13,
-                        thickness: 0.3,
-                        color: Color.fromARGB(255, 199, 199, 199),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: (() => FirebaseAuth.instance.signOut()),
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 18,
-                            ),
-                            Icon(
-                              Icons.logout,
-                              color: Color.fromARGB(255, 121, 120, 120),
-                              size: 18,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text("Log Out", style: TextStyle(fontSize: 16)),
-                          ],
+                        Icon(
+                          Icons.logout,
+                          color: Color.fromARGB(255, 121, 120, 120),
+                          size: 18,
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text("Log Out", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -617,5 +817,36 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ));
+  }
+
+  Future updateProfile(context) async {
+    final isValid = formKey.currentState!.validate();
+    if (!isValid) return;
+
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      DocumentReference documentReferencer =
+          FirebaseFirestore.instance.collection('users').doc(user!.email);
+      Map<String, dynamic> data = <String, dynamic>{
+        'name': nameController.text.trim(),
+        'phoneNumber': phoneController.text.trim(),
+      };
+      await documentReferencer
+          .update(data)
+          .then(((value) => Get.back()))
+          .then(((value) => Get.back()))
+          .then((value) => Get.snackbar('Success', 'Successfully Edited',
+              duration: const Duration(milliseconds: 2000),
+              backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+    } on FirebaseException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494));
+    }
   }
 }

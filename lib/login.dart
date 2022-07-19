@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import 'provider/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -312,12 +315,11 @@ class _LoginState extends State<Login> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Get.snackbar('Chotto Matte',
-                                          'Service denied at the moment',
-                                          duration: const Duration(
-                                              milliseconds: 2000),
-                                          backgroundColor: const Color.fromARGB(
-                                              126, 255, 255, 255));
+                                      final provider =
+                                          Provider.of<GoogleSignInProvider>(
+                                              context,
+                                              listen: false);
+                                      provider.googleLogin(context);
                                     },
                                     child: Image.asset(
                                       "assets/images/google.png",

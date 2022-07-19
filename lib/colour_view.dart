@@ -63,7 +63,7 @@ class _ColorViewState extends State<ColorView> {
                     List<QueryDocumentSnapshot<Object?>> firestoreBannerImage =
                         snapshot.data!.docs;
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
+                      height: MediaQuery.of(context).size.height / 4.3,
                       child: CarouselSlider.builder(
                           unlimitedMode: true,
                           itemCount: firestoreBannerImage.length,

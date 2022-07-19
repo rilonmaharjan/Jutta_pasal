@@ -102,8 +102,8 @@ class _TabViewBrandsState extends State<TabViewBrands> {
                           logo: firestoreitems[index]['logo'],
                           onTap: () {
                             Get.to(() => BrandProducts(
-                                  title:
-                                      firestoreitems[index]['logo'].toString(),
+                                  title: firestoreitems[index]['brand_name']
+                                      .toString(),
                                 ));
                           },
                         );

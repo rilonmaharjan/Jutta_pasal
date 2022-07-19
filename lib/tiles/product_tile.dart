@@ -52,7 +52,7 @@ class _AdminProductsState extends State<ProductTile> {
                                       topLeft: Radius.circular(30),
                                       bottomLeft: Radius.circular(30))),
                               child: Text(
-                                "- " + widget.discount + "  %",
+                                widget.discount + "% off",
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   fontSize: 11,

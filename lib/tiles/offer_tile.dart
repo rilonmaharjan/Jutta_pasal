@@ -62,7 +62,7 @@ class _AdminProductsState extends State<OfferTile> {
                                       topLeft: Radius.circular(30),
                                       bottomLeft: Radius.circular(30))),
                               child: Text(
-                                "- " + widget.discount + "  %",
+                                widget.discount + "% off",
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   fontSize: 11,
@@ -88,6 +88,8 @@ class _AdminProductsState extends State<OfferTile> {
                       ),
                       Text(
                         widget.desc,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 14,
                         ),

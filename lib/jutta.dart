@@ -76,6 +76,8 @@ class _KhanaState extends State<Jutta> {
                     var fname = firestoreItems[0]['name'].split(" ");
                     return Text(
                       "HELLO,  " + fname[0].toString().toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black,

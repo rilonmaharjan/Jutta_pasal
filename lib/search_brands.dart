@@ -112,7 +112,7 @@ class _SearchBrandsState extends State<SearchBrands> {
                       itemBuilder: (BuildContext context, int index) {
                         return BrandViewTile(
                           image: firestoreitems[index]['image'],
-                          logo: firestoreitems[index]['brand_name'],
+                          logo: firestoreitems[index]['logo'],
                           onTap: () {
                             Get.to(() => BrandProducts(
                                   title: firestoreitems[index]['brand_name']

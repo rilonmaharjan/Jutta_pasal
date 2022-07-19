@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_count_down/date_count_down.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../brand_products.dart';
 import '../order.dart';
@@ -27,9 +26,7 @@ class _AllState extends State<All> {
           stream: FirebaseFirestore.instance.collection("products").snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const SizedBox();
             } else {
               List<QueryDocumentSnapshot<Object?>> firestoreitems =
                   snapshot.data!.docs;
@@ -90,38 +87,44 @@ class _AllState extends State<All> {
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: 10,
+                          itemCount: 16,
                           itemBuilder: (context, index) {
-                            return OfferTile(
-                              image: firestoreitems[index]['image'],
-                              title: firestoreitems[index]['productName'],
-                              desc: firestoreitems[index]['description'],
-                              price: firestoreitems[index]['price'].toString(),
-                              discount:
-                                  firestoreitems[index]['discount'].toString(),
-                              onTap: () {
-                                Get.to(() => Order(
-                                      url: firestoreitems[index]['image'],
-                                      price: firestoreitems[index]['price']
-                                          .toString(),
-                                      title: firestoreitems[index]
-                                          ['productName'],
-                                      discount: firestoreitems[index]
-                                              ['discount']
-                                          .toString(),
-                                      description: firestoreitems[index]
-                                          ['description'],
-                                      brandStore: firestoreitems[index]
-                                          ['brand_store'],
-                                      category: firestoreitems[index]
-                                          ['category'],
-                                      offer: firestoreitems[index]['offer'],
-                                      productId: firestoreitems[index]
-                                          ['productID'],
-                                      type: firestoreitems[index]['type'],
-                                    ));
-                              },
-                            );
+                            return "Yes" ==
+                                    firestoreitems[index]['offer'].toString()
+                                ? OfferTile(
+                                    image: firestoreitems[index]['image'],
+                                    title: firestoreitems[index]['productName'],
+                                    desc: firestoreitems[index]['description'],
+                                    price: firestoreitems[index]['price']
+                                        .toString(),
+                                    discount: firestoreitems[index]['discount']
+                                        .toString(),
+                                    onTap: () {
+                                      Get.to(() => Order(
+                                            url: firestoreitems[index]['image'],
+                                            price: firestoreitems[index]
+                                                    ['price']
+                                                .toString(),
+                                            title: firestoreitems[index]
+                                                ['productName'],
+                                            discount: firestoreitems[index]
+                                                    ['discount']
+                                                .toString(),
+                                            description: firestoreitems[index]
+                                                ['description'],
+                                            brandStore: firestoreitems[index]
+                                                ['brand_store'],
+                                            category: firestoreitems[index]
+                                                ['category'],
+                                            offer: firestoreitems[index]
+                                                ['offer'],
+                                            productId: firestoreitems[index]
+                                                ['productID'],
+                                            type: firestoreitems[index]['type'],
+                                          ));
+                                    },
+                                  )
+                                : const SizedBox();
                           }),
                     ),
                   ),
@@ -132,9 +135,7 @@ class _AllState extends State<All> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+                          return const SizedBox();
                         } else {
                           List<QueryDocumentSnapshot<Object?>> firestoreitems =
                               snapshot.data!.docs;
