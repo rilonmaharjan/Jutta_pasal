@@ -86,7 +86,7 @@ class _TabViewBrandsState extends State<TabViewBrands> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Text(
-                    'No User Data...',
+                    'Loading...',
                   );
                 } else {
                   List<QueryDocumentSnapshot<Object?>> firestoreitems =
@@ -104,6 +104,8 @@ class _TabViewBrandsState extends State<TabViewBrands> {
                             Get.to(() => BrandProducts(
                                   title: firestoreitems[index]['brand_name']
                                       .toString(),
+                                  logo: firestoreitems[index]['logo'],
+                                  image: firestoreitems[index]['image'],
                                 ));
                           },
                         );

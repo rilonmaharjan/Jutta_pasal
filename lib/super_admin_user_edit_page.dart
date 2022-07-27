@@ -74,7 +74,7 @@ class _SuperAdminUserEditPageState extends State<SuperAdminUserEditPage> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Text(
-                        'No User Data...',
+                        'Loading...',
                       );
                     } else {
                       return Column(

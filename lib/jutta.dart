@@ -1,10 +1,11 @@
 import 'package:captcha/categories/casual.dart';
 import 'package:captcha/categories/classic.dart';
-import 'package:captcha/colour_view.dart';
+import 'package:captcha/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'super_admin_view_page.dart';
 import 'categories/all.dart';
@@ -68,7 +69,7 @@ class _KhanaState extends State<Jutta> {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Text(
-                      'No User Data...',
+                      'Loading...',
                     );
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreItems =
@@ -95,21 +96,28 @@ class _KhanaState extends State<Jutta> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const ColorView());
+                    Get.to(() => const SearchView());
                   },
                   child: const Icon(
-                    Icons.color_lens_outlined,
-                    color: Color.fromARGB(255, 65, 65, 65),
+                    Icons.search,
+                    color: Color.fromARGB(255, 0, 0, 0),
                     size: 24,
                   ),
                 ),
                 const SizedBox(
                   width: 15,
                 ),
-                const Icon(
-                  Icons.message,
-                  color: Color.fromARGB(255, 65, 65, 65),
-                  size: 24,
+                GestureDetector(
+                  onTap: () {
+                    String mailUrl =
+                        "mailto:rilon.maharjan@gmail.com?subject=Message to JuttaPasal&body";
+                    launchUrl(Uri.parse(mailUrl));
+                  },
+                  child: const Icon(
+                    Icons.message,
+                    color: Color.fromARGB(255, 65, 65, 65),
+                    size: 24,
+                  ),
                 ),
               ],
             ),
@@ -169,9 +177,7 @@ class _KhanaState extends State<Jutta> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Text("Loading...");
                       } else {
                         List<QueryDocumentSnapshot<Object?>> firestoreUsers =
                             snapshot.data!.docs;

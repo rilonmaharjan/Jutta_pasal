@@ -80,6 +80,8 @@ class _AdminProductsState extends State<OfferTile> {
                     children: [
                       Text(
                         widget.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500),
                       ),

@@ -99,7 +99,7 @@ class _SuperAdminUserViewPageState extends State<SuperAdminUserViewPage> {
                     .snapshots()
                 : FirebaseFirestore.instance.collection("users").snapshots(),
             builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting)
+              return (!snapshot.hasData)
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(
                       shrinkWrap: true,

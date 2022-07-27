@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Text(
-                          'No User Data...',
+                          'Loading...',
                         );
                       } else {
                         List<QueryDocumentSnapshot<Object?>> firestoreItems =
@@ -153,7 +153,7 @@ class _ProfileState extends State<Profile> {
                                   BoxShadow(
                                       color: Color.fromARGB(255, 235, 233, 233),
                                       offset: Offset(2, 2),
-                                      blurRadius: 10)
+                                      blurRadius: 3)
                                 ]),
                             child: Row(
                               children: [
@@ -226,7 +226,7 @@ class _ProfileState extends State<Profile> {
                       BoxShadow(
                           color: Color.fromARGB(255, 235, 233, 233),
                           offset: Offset(2, 2),
-                          blurRadius: 10)
+                          blurRadius: 0)
                     ]),
                     child: Row(
                       children: const [
@@ -255,6 +255,47 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
+                GestureDetector(
+                  onTap: () {
+                    // Get.to(() => );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(top: 21, bottom: 18),
+                    decoration:
+                        const BoxDecoration(color: Colors.white, boxShadow: [
+                      BoxShadow(
+                          color: Color.fromARGB(255, 235, 233, 233),
+                          offset: Offset(2, 2),
+                          blurRadius: 3)
+                    ]),
+                    child: Row(
+                      children: const [
+                        SizedBox(
+                          width: 18,
+                        ),
+                        Icon(
+                          Icons.history_sharp,
+                          color: Color.fromARGB(255, 121, 120, 120),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text("Order History", style: TextStyle(fontSize: 16)),
+                        Spacer(),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: Color.fromARGB(255, 121, 120, 120),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 7,
                 ),
@@ -266,7 +307,7 @@ class _ProfileState extends State<Profile> {
                     BoxShadow(
                         color: Color.fromARGB(255, 235, 233, 233),
                         offset: Offset(2, 2),
-                        blurRadius: 10)
+                        blurRadius: 3)
                   ]),
                   child: Column(
                     children: [
@@ -329,7 +370,7 @@ class _ProfileState extends State<Profile> {
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Text(
-                                'No User Data...',
+                                'Loading...',
                               );
                             } else {
                               List<QueryDocumentSnapshot<Object?>>
@@ -394,7 +435,7 @@ class _ProfileState extends State<Profile> {
                     BoxShadow(
                         color: Color.fromARGB(255, 235, 233, 233),
                         offset: Offset(2, 2),
-                        blurRadius: 10)
+                        blurRadius: 3)
                   ]),
                   child: Column(
                     children: [
@@ -495,7 +536,7 @@ class _ProfileState extends State<Profile> {
                     BoxShadow(
                         color: Color.fromARGB(255, 235, 233, 233),
                         offset: Offset(2, 2),
-                        blurRadius: 10)
+                        blurRadius: 3)
                   ]),
                   child: Column(
                     children: [
@@ -597,7 +638,7 @@ class _ProfileState extends State<Profile> {
                       GestureDetector(
                         onTap: () {
                           String mailUrl =
-                              "mailto:rilon.maharjan@gmail.com?subject=Feedback to KhanaGhar&body=";
+                              "mailto:rilon.maharjan@gmail.com?subject=Feedback to JuttaPasal&body=";
                           launchUrl(Uri.parse(mailUrl));
                         },
                         child: Row(
@@ -689,7 +730,7 @@ class _ProfileState extends State<Profile> {
                       BoxShadow(
                           color: Color.fromARGB(255, 235, 233, 233),
                           offset: Offset(2, 2),
-                          blurRadius: 10)
+                          blurRadius: 3)
                     ]),
                     child: Row(
                       children: const [
@@ -723,7 +764,7 @@ class _ProfileState extends State<Profile> {
                     BoxShadow(
                         color: Color.fromARGB(255, 235, 233, 233),
                         offset: Offset(2, 2),
-                        blurRadius: 10)
+                        blurRadius: 3)
                   ]),
                   child: Column(
                     children: [

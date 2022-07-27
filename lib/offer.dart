@@ -98,8 +98,8 @@ class _OfferState extends State<Offer> {
                       .collection("products")
                       .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  const Center(
+                if (!snapshot.hasData) {
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else {
@@ -143,7 +143,6 @@ class _OfferState extends State<Offer> {
                                 )
                               : const SizedBox())));
                 }
-                return const SizedBox();
               }),
         ),
       ),

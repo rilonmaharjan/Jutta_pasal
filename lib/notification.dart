@@ -18,7 +18,8 @@ class _NotificasonState extends State<Notificason> {
           backgroundColor: Colors.white,
           title: const Text(
             "Notifications",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
           ),
           elevation: 2.0,
           iconTheme: const IconThemeData(color: Colors.black),

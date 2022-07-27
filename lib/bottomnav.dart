@@ -1,6 +1,6 @@
+import 'package:captcha/colour_view.dart';
 import 'package:captcha/jutta.dart';
 import 'package:captcha/profile.dart';
-import 'package:captcha/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class _BottomNavState extends State<BottomNav> {
     const Jutta(),
 
     // Search
-    const SearchView(),
+    const ColorView(),
 
     //Cart
     const Cart(),
@@ -67,9 +67,9 @@ class _BottomNavState extends State<BottomNav> {
           ),
           const BottomNavigationBarItem(
               icon: Icon(
-                Icons.search_outlined,
+                Icons.color_lens_outlined,
               ),
-              label: 'Search'),
+              label: 'Color Panel'),
           BottomNavigationBarItem(
               icon: Stack(children: [
                 const Icon(

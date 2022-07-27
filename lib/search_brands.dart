@@ -97,8 +97,8 @@ class _SearchBrandsState extends State<SearchBrands> {
                       .snapshots()
                   : FirebaseFirestore.instance.collection("brand").snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  const Center(
+                if (!snapshot.hasData) {
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else {
@@ -117,12 +117,13 @@ class _SearchBrandsState extends State<SearchBrands> {
                             Get.to(() => BrandProducts(
                                   title: firestoreitems[index]['brand_name']
                                       .toString(),
+                                  logo: firestoreitems[index]['logo'],
+                                  image: firestoreitems[index]['image'],
                                 ));
                           },
                         );
                       });
                 }
-                return const SizedBox();
               }),
         ),
       ),

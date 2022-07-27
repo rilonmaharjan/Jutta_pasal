@@ -99,8 +99,8 @@ class _SearchProductsState extends State<SearchProducts> {
                       .collection("products")
                       .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  const Center(
+                if (!snapshot.hasData) {
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else {
@@ -136,7 +136,6 @@ class _SearchProductsState extends State<SearchProducts> {
                                 },
                               ))));
                 }
-                return const SizedBox();
               }),
         ),
       ),

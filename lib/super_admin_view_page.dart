@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../admin_view/admin_upload_page.dart';
-import '../tiles/admin_product_tile.dart';
 import 'admin_edit_page.dart';
+import 'tiles/product_tile.dart';
 
 class AdminViewPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -105,8 +105,8 @@ class _AdminViewPageState extends State<AdminViewPage> {
                           .collection("products")
                           .snapshots(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      const Center(
+                    if (!snapshot.hasData) {
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else {
@@ -115,7 +115,7 @@ class _AdminViewPageState extends State<AdminViewPage> {
                       return Wrap(
                           children: List.generate(
                               firestoreitems.length,
-                              ((index) => AdminProductTile(
+                              ((index) => ProductTile(
                                     image: firestoreitems[index]['image'],
                                     title: firestoreitems[index]['productName'],
                                     desc: firestoreitems[index]['description'],
@@ -146,7 +146,6 @@ class _AdminViewPageState extends State<AdminViewPage> {
                                     },
                                   ))));
                     }
-                    return const SizedBox();
                   }),
             ),
             Padding(

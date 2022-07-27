@@ -87,7 +87,7 @@ class _TabViewShoesState extends State<TabViewShoes> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Text(
-                    'No User Data...',
+                    'Loading...',
                   );
                 } else {
                   List<QueryDocumentSnapshot<Object?>> firestoreitems =

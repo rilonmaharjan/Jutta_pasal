@@ -189,6 +189,10 @@ class _AllState extends State<All> {
                                                   title: firestoreitems[index]
                                                           ['brand_name']
                                                       .toString(),
+                                                  logo: firestoreitems[index]
+                                                      ['logo'],
+                                                  image: firestoreitems[index]
+                                                      ['image'],
                                                 ));
                                           },
                                         );

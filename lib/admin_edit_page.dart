@@ -105,7 +105,7 @@ class _AdminPageState extends State<AdminEditPage> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Text(
-                        'No User Data...',
+                        'Loading...',
                       );
                     } else {
                       List<QueryDocumentSnapshot<Object?>> firestoreItems =

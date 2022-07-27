@@ -56,9 +56,6 @@ class _ColorViewState extends State<ColorView> {
                 builder: ((context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
                   } else {
                     List<QueryDocumentSnapshot<Object?>> firestoreBannerImage =
                         snapshot.data!.docs;
@@ -146,18 +143,11 @@ class _ColorViewState extends State<ColorView> {
                               .snapshots(),
                       builder: (BuildContext context, snapshot) {
                         if (!snapshot.hasData) {
-                          return const SizedBox(
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
                           return SizedBox(
                             height: MediaQuery.of(context).size.height -
                                 kToolbarHeight,
                             child: const Center(
-                              child: CircularProgressIndicator(),
+                              child: Text("loading..."),
                             ),
                           );
                         } else {
@@ -172,6 +162,7 @@ class _ColorViewState extends State<ColorView> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Wrap(
+                                        alignment: WrapAlignment.start,
                                         children: List.generate(
                                             firestoreitems.length,
                                             ((index) => ProductTile(

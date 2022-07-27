@@ -88,7 +88,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Text(
-                        'No User Data...',
+                        'Loading...',
                       );
                     } else {
                       List<QueryDocumentSnapshot<Object?>> firestoreItems =

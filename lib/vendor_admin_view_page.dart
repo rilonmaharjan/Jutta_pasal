@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../admin_view/admin_upload_page.dart';
-import '../tiles/admin_product_tile.dart';
 import 'admin_edit_page.dart';
+import 'tiles/product_tile.dart';
 
 class VendorAdminViewPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -24,6 +25,7 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
   var name = "";
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -103,8 +105,8 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                             .collection("products")
                             .snapshots(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        const Center(
+                      if (!snapshot.hasData) {
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       } else {
@@ -117,7 +119,7 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                                 ((index) => widget.adminRole ==
                                         firestoreitems[index]['brand_store']
                                             .toString()
-                                    ? AdminProductTile(
+                                    ? ProductTile(
                                         image: firestoreitems[index]['image'],
                                         title: firestoreitems[index]
                                             ['productName'],
@@ -155,7 +157,6 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                                       )
                                     : const SizedBox())));
                       }
-                      return const SizedBox();
                     }),
               ),
               Padding(
@@ -164,7 +165,8 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                       alignment: Alignment.bottomRight,
                       child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
-                            .collection("products")
+                            .collection("users")
+                            .where("email", isEqualTo: user!.email)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
@@ -181,7 +183,7 @@ class _VendorAdminViewPageState extends State<VendorAdminViewPage> {
                                 onPressed: () {
                                   Get.to(AdminUploadPage(
                                       brandUploadName: firestoreitems[0]
-                                              ['brand_store']
+                                              ['adminrole']
                                           .toString()));
                                 });
                           }
