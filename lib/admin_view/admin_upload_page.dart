@@ -61,6 +61,11 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          "Add Products",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -93,440 +98,230 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
                     } else {
                       List<QueryDocumentSnapshot<Object?>> firestoreItems =
                           snapshot.data!.docs;
-                      return firestoreItems[0]['adminrole'] == 'superAdmin'
-                          ? Column(
-                              children: [
-                                TextFormField(
+                      return Column(
+                        children: [
+                          firestoreItems[0]['adminrole'] == 'superAdmin'
+                              ? TextFormField(
                                   controller: brandController,
                                   autofocus: true,
                                   textInputAction: TextInputAction.next,
                                   textCapitalization: TextCapitalization.words,
                                   decoration: const InputDecoration(
-                                      labelText: "Brand/Store Name"),
+                                      labelText: "Store Name"),
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   validator: (value) =>
                                       (value != null && value.isEmpty)
-                                          ? 'Brand/Store Must Not be Empty'
+                                          ? 'Store Name Must Not be Empty'
                                           : null,
-                                ),
-                                TextFormField(
-                                  controller: titleController,
-                                  textInputAction: TextInputAction.next,
-                                  textCapitalization: TextCapitalization.words,
-                                  decoration: const InputDecoration(
-                                      labelText: "Product Name"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Product Name Must Not be Empty'
-                                          : null,
-                                ),
-                                TextFormField(
-                                  controller: descController,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                      labelText: "Description"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Description Must Not be Empty'
-                                          : null,
-                                ),
-                                TextFormField(
-                                  controller: priceController,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  decoration:
-                                      const InputDecoration(labelText: "Price"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Price Must Not be Empty'
-                                          : null,
-                                ),
-                                TextFormField(
-                                  controller: discountController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.go,
-                                  decoration: const InputDecoration(
-                                      labelText: "Discount"),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    DropdownButton<String>(
-                                      value: dropDownCategory,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownCategory = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Category",
-                                        'Men',
-                                        'Women',
-                                        'Kids',
-                                        'Men,Women',
-                                        'Men,Kids',
-                                        'Women,Kids'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropDownOffer,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownOffer = newValue!;
-                                        });
-                                      },
-                                      items: <String>["Offer", 'Yes', 'No']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    DropdownButton<String>(
-                                      value: dropDownType,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownType = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Type",
-                                        'Sports',
-                                        'Classic',
-                                        'Casual'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropDownColor,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownColor = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Color",
-                                        "No Specific",
-                                        "Red",
-                                        "Black",
-                                        "Blue",
-                                        "White",
-                                        "Yellow"
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          pickImage(ImageSource.camera);
-                                        },
-                                        child: const Text("Camera")),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          pickImage(ImageSource.gallery);
-                                        },
-                                        child: const Text("Gallery"))
-                                  ],
                                 )
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                TextFormField(
+                              : TextFormField(
                                   controller: brandController,
                                   readOnly: true,
                                   decoration: const InputDecoration(
-                                      labelText: "Brand/Store Name"),
+                                      labelText: "Store Name"),
                                 ),
-                                TextFormField(
-                                  controller: titleController,
-                                  autofocus: true,
-                                  textInputAction: TextInputAction.next,
-                                  textCapitalization: TextCapitalization.words,
-                                  decoration: const InputDecoration(
-                                      labelText: "Product Name"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Product Name Must Not be Empty'
-                                          : null,
+                          TextFormField(
+                            controller: titleController,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: const InputDecoration(
+                                labelText: "Product Name"),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) =>
+                                (value != null && value.isEmpty)
+                                    ? 'Product Name Must Not be Empty'
+                                    : null,
+                          ),
+                          TextFormField(
+                            controller: descController,
+                            textInputAction: TextInputAction.next,
+                            decoration:
+                                const InputDecoration(labelText: "Description"),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) =>
+                                (value != null && value.isEmpty)
+                                    ? 'Description Must Not be Empty'
+                                    : null,
+                          ),
+                          TextFormField(
+                            controller: priceController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            decoration:
+                                const InputDecoration(labelText: "Price"),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) =>
+                                (value != null && value.isEmpty)
+                                    ? 'Price Must Not be Empty'
+                                    : null,
+                          ),
+                          TextFormField(
+                            controller: discountController,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.go,
+                            decoration:
+                                const InputDecoration(labelText: "Discount"),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              DropdownButton<String>(
+                                value: dropDownCategory,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
                                 ),
-                                TextFormField(
-                                  controller: descController,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                      labelText: "Description"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Description Must Not be Empty'
-                                          : null,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownCategory = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  "Category",
+                                  'Men',
+                                  'Women',
+                                  'Kids',
+                                  'Men,Women',
+                                  'Men,Kids',
+                                  'Women,Kids'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownOffer,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
                                 ),
-                                TextFormField(
-                                  controller: priceController,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  decoration:
-                                      const InputDecoration(labelText: "Price"),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) =>
-                                      (value != null && value.isEmpty)
-                                          ? 'Price Must Not be Empty'
-                                          : null,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownOffer = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  "Offer",
+                                  'Yes',
+                                  'No'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              DropdownButton<String>(
+                                value: dropDownType,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style: const TextStyle(
+                                  color: Colors.deepPurpleAccent,
                                 ),
-                                TextFormField(
-                                  controller: discountController,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.go,
-                                  decoration: const InputDecoration(
-                                      labelText: "Discount"),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownType = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  "Type",
+                                  'Sports',
+                                  'Classic',
+                                  'Casual'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownColor,
+                                icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    DropdownButton<String>(
-                                      value: dropDownCategory,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownCategory = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Category",
-                                        'Men',
-                                        'Women',
-                                        'Kids',
-                                        'Men,Women',
-                                        'Men,Kids',
-                                        'Women,Kids'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropDownOffer,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownOffer = newValue!;
-                                        });
-                                      },
-                                      items: <String>["Offer", 'Yes', 'No']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    DropdownButton<String>(
-                                      value: dropDownType,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownType = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Type",
-                                        'Sports',
-                                        'Classic',
-                                        'Casual'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropDownColor,
-                                      icon: const Icon(Icons.arrow_downward),
-                                      elevation: 16,
-                                      style: const TextStyle(
-                                          color: Colors.deepPurple),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownColor = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "Color",
-                                        "No Specific",
-                                        "Red",
-                                        "Black",
-                                        "Blue",
-                                        "White",
-                                        "Yellow"
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          pickImage(ImageSource.camera);
-                                        },
-                                        child: const Text("Camera")),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          pickImage(ImageSource.gallery);
-                                        },
-                                        child: const Text("Gallery"))
-                                  ],
-                                )
-                              ],
-                            );
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownColor = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  "Color",
+                                  "No Specific",
+                                  "Red",
+                                  "Black",
+                                  "Blue",
+                                  "White",
+                                  "Yellow"
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    pickImage(ImageSource.camera);
+                                  },
+                                  child: const Text("Camera")),
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    pickImage(ImageSource.gallery);
+                                  },
+                                  child: const Text("Gallery"))
+                            ],
+                          )
+                        ],
+                      );
                     }
                   }),
               const SizedBox(
@@ -630,7 +425,7 @@ class _AdminUploadPageState extends State<AdminUploadPage> {
               .set(data)
               .then(((value) => Get.back()))
               .then(((value) => Get.back()))
-              .then((value) => Get.snackbar('Success', 'Successfully Edited',
+              .then((value) => Get.snackbar('Success', 'Uploaded Successfully',
                   duration: const Duration(milliseconds: 2000),
                   backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
         });

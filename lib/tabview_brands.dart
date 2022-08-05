@@ -106,6 +106,8 @@ class _TabViewBrandsState extends State<TabViewBrands> {
                                       .toString(),
                                   logo: firestoreitems[index]['logo'],
                                   image: firestoreitems[index]['image'],
+                                  website: firestoreitems[index]['website'],
+                                  brandId: firestoreitems[index]['brandId'],
                                 ));
                           },
                         );

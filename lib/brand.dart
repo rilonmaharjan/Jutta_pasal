@@ -79,7 +79,7 @@ class _BrandState extends State<Brand> {
                     ),
                     onPressed: clearTextInput,
                   ),
-                  hintText: 'Search for Brands..',
+                  hintText: 'Search for Stores...',
                   border: InputBorder.none),
             ),
           ),
@@ -87,47 +87,56 @@ class _BrandState extends State<Brand> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: StreamBuilder<QuerySnapshot>(
-                stream: (name != "")
-                    ? FirebaseFirestore.instance
-                        .collection('brand')
-                        .where('brand_name', isGreaterThanOrEqualTo: name)
-                        .where('brand_name', isLessThan: name + 'z')
-                        .snapshots()
-                    : FirebaseFirestore.instance
-                        .collection("brand")
-                        .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    List<QueryDocumentSnapshot<Object?>> firestoreitems =
-                        snapshot.data!.docs;
-                    return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: firestoreitems.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return BrandViewTile(
-                            image: firestoreitems[index]['image'],
-                            logo: firestoreitems[index]['logo'],
-                            onTap: () {
-                              Get.to(() => BrandProducts(
-                                    title: firestoreitems[index]['brand_name']
-                                        .toString(),
-                                    logo: firestoreitems[index]['logo'],
-                                    image: firestoreitems[index]['image'],
-                                  ));
-                            },
-                          );
-                        });
-                  }
-                }),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: (name != "")
+                        ? FirebaseFirestore.instance
+                            .collection('brand')
+                            .where('brand_name', isGreaterThanOrEqualTo: name)
+                            .where('brand_name', isLessThan: name + 'z')
+                            .snapshots()
+                        : FirebaseFirestore.instance
+                            .collection("brand")
+                            .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                            snapshot.data!.docs;
+                        return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: firestoreitems.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return BrandViewTile(
+                                image: firestoreitems[index]['image'],
+                                logo: firestoreitems[index]['logo'],
+                                onTap: () {
+                                  Get.to(() => BrandProducts(
+                                        title: firestoreitems[index]
+                                                ['brand_name']
+                                            .toString(),
+                                        logo: firestoreitems[index]['logo'],
+                                        image: firestoreitems[index]['image'],
+                                        website: firestoreitems[index]
+                                            ['website'],
+                                        brandId: firestoreitems[index]
+                                            ['brandId'],
+                                      ));
+                                },
+                              );
+                            });
+                      }
+                    }),
+              ),
+            ],
           ),
         ),
       ),

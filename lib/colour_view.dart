@@ -93,7 +93,7 @@ class _ColorViewState extends State<ColorView> {
             Obx(
               () => StickyHeader(
                 header: Container(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   color: const Color.fromARGB(255, 250, 250, 250),
                   width: MediaQuery.of(context).size.width,
                   height: 82,

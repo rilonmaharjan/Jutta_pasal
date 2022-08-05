@@ -1,15 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'order.dart';
 import 'tiles/product_tile.dart';
 
 class BrandProducts extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final title, image, logo;
-  const BrandProducts({Key? key, this.title, this.image, this.logo})
+  final title, image, logo, website, brandId;
+  const BrandProducts(
+      {Key? key, this.title, this.image, this.logo, this.website, this.brandId})
       : super(key: key);
 
   @override
@@ -47,7 +50,6 @@ class _BrandProductsState extends State<BrandProducts> {
               },
               controller: nameHolder,
               textCapitalization: TextCapitalization.words,
-              autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                   prefixIcon: const Icon(
@@ -79,12 +81,12 @@ class _BrandProductsState extends State<BrandProducts> {
                     fadeOutDuration: const Duration(milliseconds: 0),
                     imageUrl: widget.image,
                     width: MediaQuery.of(context).size.width,
-                    height: 182,
+                    height: 200,
                     fit: BoxFit.cover,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 182,
+                    height: 200,
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(88, 185, 185, 185)),
                     child: Align(
@@ -95,13 +97,62 @@ class _BrandProductsState extends State<BrandProducts> {
                           width: 110,
                         )),
                   ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 2, right: 10),
+                      child: ElevatedButton(
+                        onPressed: follow,
+                        child: const Text(
+                          "Follow",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(255, 236, 236, 236)),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            fixedSize: const Size(90, 30),
+                            textStyle: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w700),
+                            primary: const Color.fromARGB(255, 26, 26, 26),
+                            onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                      ),
+                    ),
+                  )
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, right: 10.0, left: 10),
-                child: Text(
-                  "Products",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+              Padding(
+                padding:
+                    const EdgeInsets.only(top: 10.0, right: 10.0, left: 10),
+                child: Row(
+                  children: [
+                    const Text(
+                      "Products",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        String url = widget.website.toString();
+                        launchUrl(Uri.parse(url));
+                      },
+                      child: SizedBox(
+                        child: Row(
+                          children: const [
+                            Text(
+                              "Visit Us: ",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w300),
+                            ),
+                            Icon(Icons.link)
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
               StreamBuilder<QuerySnapshot>(
@@ -187,5 +238,40 @@ class _BrandProductsState extends State<BrandProducts> {
         ),
       ),
     );
+  }
+
+  Future follow() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      DocumentReference documentReferencer = FirebaseFirestore.instance
+          .collection('follow')
+          .doc(user!.email)
+          .collection('brands')
+          .doc(widget.brandId);
+      Map<String, dynamic> data = <String, dynamic>{
+        'brand_name': widget.title,
+        'image': widget.image,
+        'logo': widget.logo,
+        'website': widget.website,
+        'brandId': widget.brandId,
+      };
+
+      await documentReferencer
+          .set(data)
+          .then((value) => Navigator.pop(context))
+          .then((value) => Get.snackbar("Followed", "Successfully followed",
+              duration: const Duration(milliseconds: 2000),
+              backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+    } on FirebaseException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255));
+    }
   }
 }

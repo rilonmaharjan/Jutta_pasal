@@ -16,7 +16,7 @@ class CartTile extends StatefulWidget {
       this.price,
       this.discount,
       this.desc,
-      required this.productID,
+      this.productID,
       this.onTap})
       : super(key: key);
 

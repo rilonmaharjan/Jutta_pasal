@@ -99,6 +99,9 @@ dependencies:
   permission_handler: ^9.2.0
   fvm: ^2.3.1
 
+  #shimmer for loading
+  shimmer: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:

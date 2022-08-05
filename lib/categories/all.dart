@@ -49,7 +49,7 @@ class _AllState extends State<All> {
                               style: TextStyle(fontSize: 13),
                             ),
                             CountDownText(
-                              due: DateTime.parse("2022-08-20 00:00:00"),
+                              due: DateTime.parse("2022-10-20 00:00:00"),
                               finishedText: "Ended",
                               showLabel: true,
                               longDateName: false,
@@ -150,7 +150,7 @@ class _AllState extends State<All> {
                                   child: Row(
                                     children: [
                                       const Text(
-                                        "Our Brand Partners",
+                                        "Our Stores",
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       const Spacer(),
@@ -186,6 +186,8 @@ class _AllState extends State<All> {
                                               ['brand_name'],
                                           onTap: () {
                                             Get.to(() => BrandProducts(
+                                                  brandId: firestoreitems[index]
+                                                      ['brandId'],
                                                   title: firestoreitems[index]
                                                           ['brand_name']
                                                       .toString(),
@@ -193,6 +195,8 @@ class _AllState extends State<All> {
                                                       ['logo'],
                                                   image: firestoreitems[index]
                                                       ['image'],
+                                                  website: firestoreitems[index]
+                                                      ['website'],
                                                 ));
                                           },
                                         );

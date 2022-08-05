@@ -1,6 +1,9 @@
+import 'package:captcha/edit_business_page.dart';
+import 'package:captcha/business_profile.dart';
 import 'package:captcha/change_password.dart';
 import 'package:captcha/notification.dart';
 import 'package:captcha/permissions.dart';
+import 'package:captcha/tiles/followed_store_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'followed_brand_viewpage.dart';
 import 'provider/google_sign_in.dart';
 
 class Profile extends StatefulWidget {
@@ -255,6 +259,85 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("follow")
+                        .doc(user?.email)
+                        .collection('brands')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                            snapshot.data!.docs;
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => const FollowedBrandViewPage());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.only(top: 21, bottom: 18),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromARGB(255, 235, 233, 233),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3)
+                                ]),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 18,
+                                ),
+                                const Icon(
+                                  Icons.favorite,
+                                  color: Color.fromARGB(255, 121, 120, 120),
+                                  size: 20,
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                const Text("Followed Stores",
+                                    style: TextStyle(fontSize: 16)),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(3),
+                                  width: 20,
+                                  height: 20,
+                                  decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 253, 228, 213),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100))),
+                                  child: Text(
+                                    firestoreitems.length.toString(),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 8, 8, 8),
+                                        fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                  color:
+                                      const Color.fromARGB(255, 121, 120, 120),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                 GestureDetector(
                   onTap: () {
                     // Get.to(() => );
@@ -337,31 +420,6 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(
                         height: 10,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.snackbar('Sorry', 'Not Available At the moment',
-                              duration: const Duration(milliseconds: 2000),
-                              backgroundColor:
-                                  const Color.fromARGB(126, 255, 255, 255));
-                        },
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 18,
-                            ),
-                            Icon(
-                              Icons.business_rounded,
-                              color: Color.fromARGB(255, 121, 120, 120),
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text("Business Profile",
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
                       StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection("users")
@@ -374,53 +432,102 @@ class _ProfileState extends State<Profile> {
                               );
                             } else {
                               List<QueryDocumentSnapshot<Object?>>
-                                  firestoreItems = snapshot.data!.docs;
-                              return firestoreItems[0]['phoneNumber'] == ""
-                                  ? const SizedBox()
-                                  : Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        const Divider(
-                                          indent: 13,
-                                          endIndent: 13,
-                                          thickness: 0.3,
-                                          color: Color.fromARGB(
-                                              255, 199, 199, 199),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(
-                                                () => const ChangePassword());
-                                          },
-                                          child: Row(
-                                            children: const [
-                                              SizedBox(
-                                                width: 18,
-                                              ),
-                                              Icon(
-                                                Icons.security,
-                                                color: Color.fromARGB(
-                                                    255, 121, 120, 120),
-                                                size: 20,
-                                              ),
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              Text("Security",
-                                                  style:
-                                                      TextStyle(fontSize: 16)),
-                                            ],
+                                  firestoreUsers = snapshot.data!.docs;
+                              return firestoreUsers[0]['role'] == 'vendorAdmin'
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => EditBusinessPage(
+                                              brandName: firestoreUsers[0]
+                                                      ['adminrole']
+                                                  .toString(),
+                                              contact: firestoreUsers[0]
+                                                      ['store_contact']
+                                                  .toString(),
+                                              location: firestoreUsers[0]
+                                                      ['location']
+                                                  .toString(),
+                                              website: firestoreUsers[0]
+                                                      ['website']
+                                                  .toString(),
+                                            ));
+                                      },
+                                      child: Row(
+                                        children: const [
+                                          SizedBox(
+                                            width: 18,
                                           ),
-                                        ),
-                                      ],
+                                          Icon(
+                                            Icons.business_rounded,
+                                            color: Color.fromARGB(
+                                                255, 121, 120, 120),
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text("Edit Business Profile",
+                                              style: TextStyle(fontSize: 16)),
+                                        ],
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const BusinessProfile());
+                                      },
+                                      child: Row(
+                                        children: const [
+                                          SizedBox(
+                                            width: 18,
+                                          ),
+                                          Icon(
+                                            Icons.business_rounded,
+                                            color: Color.fromARGB(
+                                                255, 121, 120, 120),
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text("Business Profile",
+                                              style: TextStyle(fontSize: 16)),
+                                        ],
+                                      ),
                                     );
                             }
                           }),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        indent: 13,
+                        endIndent: 13,
+                        thickness: 0.3,
+                        color: Color.fromARGB(255, 199, 199, 199),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const ChangePassword());
+                        },
+                        child: Row(
+                          children: const [
+                            SizedBox(
+                              width: 18,
+                            ),
+                            Icon(
+                              Icons.security,
+                              color: Color.fromARGB(255, 121, 120, 120),
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Text("Security", style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

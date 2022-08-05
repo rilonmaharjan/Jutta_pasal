@@ -40,7 +40,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: AppBar(
           title: const Text(
             "Change Password",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
           ),
           elevation: 0.5,
           backgroundColor: Colors.white,

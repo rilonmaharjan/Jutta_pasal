@@ -119,6 +119,8 @@ class _SearchBrandsState extends State<SearchBrands> {
                                       .toString(),
                                   logo: firestoreitems[index]['logo'],
                                   image: firestoreitems[index]['image'],
+                                  website: firestoreitems[index]['website'],
+                                  brandId: firestoreitems[index]['brandId'],
                                 ));
                           },
                         );

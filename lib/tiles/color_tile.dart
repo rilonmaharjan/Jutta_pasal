@@ -27,7 +27,7 @@ class _ColorTileState extends State<ColorTile> {
           decoration: BoxDecoration(
               color: Color(int.parse(widget.bgcolor)),
               borderRadius: const BorderRadius.all(Radius.circular(100))),
-          margin: const EdgeInsets.only(top: 8, bottom: 10, left: 4),
+          margin: const EdgeInsets.only(top: 8, bottom: 10, left: 3),
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [

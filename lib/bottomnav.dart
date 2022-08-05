@@ -85,9 +85,7 @@ class _BottomNavState extends State<BottomNav> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+                          return const Center(child: SizedBox());
                         } else {
                           List<QueryDocumentSnapshot<Object?>> firestoreitems =
                               snapshot.data!.docs;

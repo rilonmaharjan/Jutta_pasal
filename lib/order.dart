@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:captcha/brand_products.dart';
 import 'package:captcha/reviews.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -208,14 +209,41 @@ class _OrderState extends State<Order> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Text(
-                          widget.brandStore.toString().toUpperCase(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("brand")
+                                .where('brand_name',
+                                    isEqualTo: widget.brandStore)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Text(
+                                  'Loading...',
+                                );
+                              } else {
+                                List<QueryDocumentSnapshot<Object?>>
+                                    firestoreItems = snapshot.data!.docs;
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => BrandProducts(
+                                          title: widget.brandStore,
+                                          image: firestoreItems[0]['image'],
+                                          logo: firestoreItems[0]['logo'],
+                                          website: firestoreItems[0]['website'],
+                                          brandId: firestoreItems[0]['brandId'],
+                                        ));
+                                  },
+                                  child: Text(
+                                    widget.brandStore.toString().toUpperCase(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
                         const SizedBox(
                           height: 8,
                         ),

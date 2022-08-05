@@ -27,7 +27,8 @@ class _PermissionsState extends State<Permissions> {
         backgroundColor: Colors.white,
         title: const Text(
           "Permissions",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
         ),
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),

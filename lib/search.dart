@@ -26,16 +26,13 @@ class _SearchViewState extends State<SearchView> {
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 236, 236, 236),
             elevation: 0.0,
-            automaticallyImplyLeading: false,
-            title: const Padding(
-              padding: EdgeInsets.only(left: 8.0, top: 0),
-              child: Text(
-                "Search Items",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
+            iconTheme: const IconThemeData(color: Colors.black),
+            title: const Text(
+              "Search Items",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
               ),
             ),
             bottom: const TabBar(
