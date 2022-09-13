@@ -3,7 +3,6 @@ import 'package:captcha/business_profile.dart';
 import 'package:captcha/change_password.dart';
 import 'package:captcha/notification.dart';
 import 'package:captcha/permissions.dart';
-import 'package:captcha/tiles/followed_store_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -326,8 +325,7 @@ class _ProfileState extends State<Profile> {
                                 const Icon(
                                   Icons.arrow_forward_ios,
                                   size: 18,
-                                  color:
-                                      const Color.fromARGB(255, 121, 120, 120),
+                                  color: Color.fromARGB(255, 121, 120, 120),
                                 ),
                                 const SizedBox(
                                   width: 20,
