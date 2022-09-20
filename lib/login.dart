@@ -1,11 +1,14 @@
+
 import 'package:captcha/bottomnav.dart';
 import 'package:captcha/forgotpassword.dart';
 import 'package:captcha/main.dart';
 import 'package:captcha/register.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +24,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   //password visible invisible
   bool _obscureText = true;
+  var loading = false;
 
   //email and password firebase
   final emailController = TextEditingController();
@@ -343,14 +347,7 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Get.snackbar('Chotto Matte',
-                                          'Service denied at the moment',
-                                          duration: const Duration(
-                                              milliseconds: 2000),
-                                          backgroundColor: const Color.fromARGB(
-                                              126, 255, 255, 255));
-                                    },
+                                    onTap: logInWithFacebook,
                                     child: Image.asset(
                                       "assets/images/facebook.png",
                                       height: 70,
@@ -405,6 +402,42 @@ class _LoginState extends State<Login> {
     //Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
+  
+
+  void logInWithFacebook() async{
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try{
+      final facebookLogin = await FacebookAuth.instance.login();
+      final userData = await FacebookAuth.instance.getUserData();
+
+      final facebookAuthCredential = FacebookAuthProvider.credential(facebookLogin.accessToken!.token);
+      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+
+      await FirebaseFirestore.instance.collection("users").doc(userData['email']).set({
+        'email': userData['email'],
+        'name': userData['name'],
+        'phoneNumber': "",
+        'role': "user",
+        'adminrole': "user",
+      }).then((value) => Get.snackbar('Irasshaimase!', 'Logged in successfully',
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+    }
+    on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255));
+    }
+     //Navigator.of(context) not working!
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+
 }
 
 //curvedesign

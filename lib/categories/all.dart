@@ -49,7 +49,7 @@ class _AllState extends State<All> {
                               style: TextStyle(fontSize: 13),
                             ),
                             CountDownText(
-                              due: DateTime.parse("2022-10-20 00:00:00"),
+                              due: DateTime.parse("2023-10-20 00:00:00"),
                               finishedText: "Ended",
                               showLabel: true,
                               longDateName: false,

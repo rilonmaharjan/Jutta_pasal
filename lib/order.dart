@@ -639,7 +639,7 @@ class _OrderState extends State<Order> {
                       width: 20,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: buynow,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
@@ -709,6 +709,47 @@ class _OrderState extends State<Order> {
           .set(data)
           .then((value) => Navigator.pop(context))
           .then((value) => Get.snackbar("Added", "Item added to cart",
+              duration: const Duration(milliseconds: 2000),
+              backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+    } on FirebaseException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255));
+    }
+  }
+
+    Future buynow() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      DocumentReference documentReferencer = FirebaseFirestore.instance
+          .collection('order request')
+          .doc(user!.email)
+          .collection('products')
+          .doc(widget.productId);
+      Map<String, dynamic> data = <String, dynamic>{
+        'brand_store': widget.brandStore,
+        'productName': widget.title,
+        'description': widget.description,
+        'price': widget.price,
+        'discount': widget.discount,
+        'image': widget.url,
+        'productID': widget.productId,
+        'category': widget.category,
+        'offer': widget.offer,
+        'type': widget.type,
+        'quantity' : quantity,
+      };
+
+      await documentReferencer
+          .set(data)
+          .then((value) => Navigator.pop(context))
+          .then((value) => Get.snackbar("Thank you", "Your order has been placed",
               duration: const Duration(milliseconds: 2000),
               backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
     } on FirebaseException catch (e) {

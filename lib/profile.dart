@@ -2,6 +2,7 @@ import 'package:captcha/edit_business_page.dart';
 import 'package:captcha/business_profile.dart';
 import 'package:captcha/change_password.dart';
 import 'package:captcha/notification.dart';
+import 'package:captcha/order_history.dart';
 import 'package:captcha/permissions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -336,47 +337,84 @@ class _ProfileState extends State<Profile> {
                         );
                       }
                     }),
-                GestureDetector(
-                  onTap: () {
-                    // Get.to(() => );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(top: 21, bottom: 18),
-                    decoration:
-                        const BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                          color: Color.fromARGB(255, 235, 233, 233),
-                          offset: Offset(2, 2),
-                          blurRadius: 3)
-                    ]),
-                    child: Row(
-                      children: const [
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Icon(
-                          Icons.history_sharp,
-                          color: Color.fromARGB(255, 121, 120, 120),
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text("Order History", style: TextStyle(fontSize: 16)),
-                        Spacer(),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 18,
-                          color: Color.fromARGB(255, 121, 120, 120),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("order request")
+                        .doc(user?.email)
+                        .collection('products')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                            snapshot.data!.docs;
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => const OrderHistory());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.only(top: 21, bottom: 18),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromARGB(255, 235, 233, 233),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3)
+                                ]),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 18,
+                                ),
+                                const Icon(
+                                  Icons.history_sharp,
+                                  color: Color.fromARGB(255, 121, 120, 120),
+                                  size: 20,
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                const Text("Order History",
+                                    style: TextStyle(fontSize: 16)),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(3),
+                                  width: 20,
+                                  height: 20,
+                                  decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 253, 228, 213),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100))),
+                                  child: Text(
+                                    firestoreitems.length.toString(),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 8, 8, 8),
+                                        fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                  color: Color.fromARGB(255, 121, 120, 120),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                 const SizedBox(
                   height: 7,
                 ),
