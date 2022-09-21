@@ -241,7 +241,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
 
           DocumentReference documentReferencer = FirebaseFirestore.instance
               .collection('business profile requests')
-              .doc(user!.email);
+              .doc(storeNameController.text);
           Map<String, dynamic> data = <String, dynamic>{
             'store/brandName': storeNameController.text,
             'contact': contactController.text,

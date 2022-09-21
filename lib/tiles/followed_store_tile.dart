@@ -90,6 +90,13 @@ class _FollowedStoreTileState extends State<FollowedStoreTile> {
 
   Future unfollow(context) async {
     FirebaseFirestore.instance
+        .collection('brand')
+        .doc(widget.brandName)
+        .collection('followers')
+        .doc(user!.email)
+        .delete();
+
+    FirebaseFirestore.instance
         .collection('follow')
         .doc(user!.email)
         .collection('brands')

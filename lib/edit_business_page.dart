@@ -191,6 +191,27 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               onPrimary: const Color.fromARGB(255, 53, 53, 53)),
                         ),
                         const SizedBox(
+                          height: 25,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            pickImageforCover(ImageSource.gallery);
+                          },
+                          child: const Text(
+                            "Edit Cover Image",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              fixedSize: const Size(285, 50),
+                              textStyle: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w700),
+                              primary: const Color.fromARGB(255, 253, 253, 253),
+                              onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                        ),
+                        const SizedBox(
                           height: 30,
                         ),
                         ElevatedButton(
@@ -258,12 +279,131 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
     }
   }
 
+  Future pickImageforCover(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+
+      setState(() {
+        file2 = File(image.path);
+      });
+    } on PlatformException catch (e) {
+      // ignore: avoid_print
+      print("Failed to upload image: $e");
+    }
+  }
+
   Future update(context) async {
-    String url;
+    String urlLogo;
+    String urlCover;
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     if (file == null) {
-      // updates without changing image
+      // updates without changing logo
+      final fileName = basename(file2!.path);
+      final destination = 'images/$fileName';
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      try {
+        final ref = FirebaseStorage.instance.ref(destination);
+        UploadTask uploadTask = ref.putFile(File(file2!.path));
+        uploadTask.whenComplete(() async {
+          urlLogo = await ref.getDownloadURL();
+          DocumentReference documentReferencer =
+              FirebaseFirestore.instance.collection('users').doc(user!.email);
+          Map<String, dynamic> data = <String, dynamic>{
+            'adminrole': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'cover image': urlLogo,
+          };
+          DocumentReference documentReferencer2 =
+              FirebaseFirestore.instance.collection('brand').doc(user!.email);
+          Map<String, dynamic> data2 = <String, dynamic>{
+            'brand_name': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'image': urlLogo
+          };
+          await documentReferencer.update(data);
+
+          await documentReferencer2
+              .update(data2)
+              .then(((value) => Get.back()))
+              .then(((value) => Get.back()))
+              .then((value) => Get.snackbar('Success', 'Successfully Edited',
+                  duration: const Duration(milliseconds: 2000),
+                  backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+        });
+      } on FirebaseException catch (e) {
+        // ignore: avoid_print
+        print(e);
+
+        Get.snackbar('Error', e.message.toString(),
+            duration: const Duration(milliseconds: 2000),
+            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494));
+      }
+    }
+    //cover image is empty
+    else if (file2 == null) {
+      final fileName = basename(file!.path);
+      final destination = 'images/$fileName';
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      try {
+        final ref = FirebaseStorage.instance.ref(destination);
+        UploadTask uploadTask = ref.putFile(File(file!.path));
+        uploadTask.whenComplete(() async {
+          urlLogo = await ref.getDownloadURL();
+          DocumentReference documentReferencer =
+              FirebaseFirestore.instance.collection('users').doc(user!.email);
+          Map<String, dynamic> data = <String, dynamic>{
+            'adminrole': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'logo': urlLogo
+          };
+          DocumentReference documentReferencer2 =
+              FirebaseFirestore.instance.collection('brand').doc(user!.email);
+          Map<String, dynamic> data2 = <String, dynamic>{
+            'brand_name': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'logo': urlLogo
+          };
+          await documentReferencer.update(data);
+
+          await documentReferencer2
+              .update(data2)
+              .then(((value) => Get.back()))
+              .then(((value) => Get.back()))
+              .then((value) => Get.snackbar('Success', 'Successfully Edited',
+                  duration: const Duration(milliseconds: 2000),
+                  backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+        });
+      } on FirebaseException catch (e) {
+        // ignore: avoid_print
+        print(e);
+
+        Get.snackbar('Error', e.message.toString(),
+            duration: const Duration(milliseconds: 2000),
+            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494));
+      }
+    }
+    // cover and logo is empty
+    else if (file == null && file2 == null) {
       try {
         showDialog(
             context: context,
@@ -305,6 +445,9 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
       // updates all
       final fileName = basename(file!.path);
       final destination = 'images/$fileName';
+
+      final fileCoverName = basename(file2!.path);
+      final destinationCover = 'images/$fileCoverName';
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -314,8 +457,12 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
       try {
         final ref = FirebaseStorage.instance.ref(destination);
         UploadTask uploadTask = ref.putFile(File(file!.path));
-        uploadTask.whenComplete(() async {
-          url = await ref.getDownloadURL();
+
+        final refCover = FirebaseStorage.instance.ref(destinationCover);
+        UploadTask uploadCover = refCover.putFile(File(file2!.path));
+
+        uploadCover.whenComplete(() async {
+          urlCover = await refCover.getDownloadURL();
           DocumentReference documentReferencer =
               FirebaseFirestore.instance.collection('users').doc(user!.email);
           Map<String, dynamic> data = <String, dynamic>{
@@ -323,7 +470,39 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
             'location': locationController.text.trim(),
             'website': websiteController.text.trim(),
             'store_contact': contactController.text.trim(),
-            'logo': url
+            'cover image': urlCover
+          };
+          DocumentReference documentReferencer2 =
+              FirebaseFirestore.instance.collection('brand').doc(user!.email);
+          Map<String, dynamic> data2 = <String, dynamic>{
+            'brand_name': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'image': urlCover
+            //imagepending
+          };
+          await documentReferencer.update(data);
+
+          await documentReferencer2
+              .update(data2)
+              .then(((value) => Get.back()))
+              .then(((value) => Get.back()))
+              .then((value) => Get.snackbar('Success', 'Successfully Edited',
+                  duration: const Duration(milliseconds: 2000),
+                  backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+        });
+
+        uploadTask.whenComplete(() async {
+          urlLogo = await ref.getDownloadURL();
+          DocumentReference documentReferencer =
+              FirebaseFirestore.instance.collection('users').doc(user!.email);
+          Map<String, dynamic> data = <String, dynamic>{
+            'adminrole': storeNameController.text.trim(),
+            'location': locationController.text.trim(),
+            'website': websiteController.text.trim(),
+            'store_contact': contactController.text.trim(),
+            'logo': urlLogo
             //imagepending
           };
           DocumentReference documentReferencer2 =
@@ -333,7 +512,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
             'location': locationController.text.trim(),
             'website': websiteController.text.trim(),
             'store_contact': contactController.text.trim(),
-            'logo': url
+            'logo': urlLogo
             //imagepending
           };
           await documentReferencer.update(data);

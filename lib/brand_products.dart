@@ -21,11 +21,14 @@ class BrandProducts extends StatefulWidget {
 
 class _BrandProductsState extends State<BrandProducts> {
   final nameHolder = TextEditingController();
+  
+    User? user = FirebaseAuth.instance.currentUser;
   clearTextInput() {
     nameHolder.clear();
   }
 
   var name = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,30 +100,94 @@ class _BrandProductsState extends State<BrandProducts> {
                           width: 110,
                         )),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 2, right: 10),
-                      child: ElevatedButton(
-                        onPressed: follow,
-                        child: const Text(
-                          "Follow",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 236, 236, 236)),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("brand")
+                          .doc(widget.title)
+                          .collection('followers')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: SizedBox(),
+                          );
+                        } else {
+                          List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                              snapshot.data!.docs;
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 8, left: 10),
+                              padding: const EdgeInsets.all(3),
+                              width: 80,
+                              height: 20,
+                              decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 253, 228, 213),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100))),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Followers:  ',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 8, 8, 8),
+                                        fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    firestoreitems.length.toString(),
+                                    style: const TextStyle(
+                                        color: Color.fromARGB(255, 8, 8, 8),
+                                        fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
-                            fixedSize: const Size(90, 30),
-                            textStyle: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w700),
-                            primary: const Color.fromARGB(255, 26, 26, 26),
-                            onPrimary: const Color.fromARGB(255, 53, 53, 53)),
-                      ),
-                    ),
-                  )
+                          );
+                        }
+                      }),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("brand")
+                          .doc(widget.title)
+                          .collection('followers')
+                          .where('followers name', isEqualTo: user!.email)
+                          .snapshots(), builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: SizedBox(),
+                      );
+                    } else {
+                      List<QueryDocumentSnapshot<Object?>> firestoreitems =
+                          snapshot.data!.docs;
+                      return Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 2, right: 10),
+                          child: ElevatedButton(
+                            onPressed:  firestoreitems.isNotEmpty ? unfollow : follow,
+                            child: Text(
+                              firestoreitems.isNotEmpty ? 'Unfollow' : 'Follow',
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Color.fromARGB(255, 236, 236, 236)),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                fixedSize: const Size(100, 30),
+                                textStyle: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w700),
+                                primary: const Color.fromARGB(255, 26, 26, 26),
+                                onPrimary:
+                                    const Color.fromARGB(255, 53, 53, 53)),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
                 ],
               ),
               Padding(
@@ -241,7 +308,6 @@ class _BrandProductsState extends State<BrandProducts> {
   }
 
   Future follow() async {
-    User? user = FirebaseAuth.instance.currentUser;
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -249,29 +315,78 @@ class _BrandProductsState extends State<BrandProducts> {
               child: CircularProgressIndicator(),
             ));
     try {
-      DocumentReference documentReferencer = FirebaseFirestore.instance
-          .collection('follow')
-          .doc(user!.email)
-          .collection('brands')
-          .doc(widget.brandId);
-      Map<String, dynamic> data = <String, dynamic>{
-        'brand_name': widget.title,
-        'image': widget.image,
-        'logo': widget.logo,
-        'website': widget.website,
-        'brandId': widget.brandId,
-      };
+       DocumentReference documentReferencer2 = FirebaseFirestore.instance
+            .collection('brand')
+            .doc(widget.title)
+            .collection('followers')
+            .doc(user!.email);
+        Map<String, dynamic> data2 = <String, dynamic>{
+          'followers name': user!.email,
+        };
 
-      await documentReferencer
-          .set(data)
-          .then((value) => Navigator.pop(context))
-          .then((value) => Get.snackbar("Followed", "Successfully followed",
-              duration: const Duration(milliseconds: 2000),
-              backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+        await documentReferencer2.set(data2);
+
+        DocumentReference documentReferencer = FirebaseFirestore.instance
+            .collection('follow')
+            .doc(user!.email)
+            .collection('brands')
+            .doc(widget.brandId);
+        Map<String, dynamic> data = <String, dynamic>{
+          'brand_name': widget.title,
+          'image': widget.image,
+          'logo': widget.logo,
+          'website': widget.website,
+          'brandId': widget.brandId,
+        };
+
+        await documentReferencer
+            .set(data)
+            .then((value) => Navigator.pop(context))
+            .then((value) => Get.snackbar("Followed", "Successfully followed",
+                duration: const Duration(milliseconds: 2000),
+                backgroundColor: const Color.fromARGB(126, 255, 255, 255)));
+      
     } on FirebaseException catch (e) {
       Get.snackbar('Error', e.message.toString(),
           duration: const Duration(milliseconds: 2000),
           backgroundColor: const Color.fromARGB(126, 255, 255, 255));
     }
   }
+
+
+  Future unfollow() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+       
+  FirebaseFirestore.instance
+            .collection('brand')
+            .doc(widget.title)
+            .collection('followers')
+            .doc(user!.email)
+            .delete();
+
+        FirebaseFirestore.instance
+            .collection('follow')
+            .doc(user!.email)
+            .collection('brands')
+            .doc(widget.brandId)
+            .delete()
+            .then((value) => Navigator.pop(context))
+            .then((value) => Get.snackbar(
+                'Unfollowed', 'Successfully Unfollowed',
+                duration: const Duration(milliseconds: 1500),
+                backgroundColor: const Color.fromRGBO(255, 255, 255, 0.494)));
+      
+    } on FirebaseException catch (e) {
+      Get.snackbar('Error', e.message.toString(),
+          duration: const Duration(milliseconds: 2000),
+          backgroundColor: const Color.fromARGB(126, 255, 255, 255));
+    }
+  }
+
 }
