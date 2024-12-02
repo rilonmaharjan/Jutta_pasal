@@ -76,8 +76,8 @@ class _FollowedStoreTileState extends State<FollowedStoreTile> {
                   fixedSize: const Size(90, 30),
                   textStyle: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w700),
-                  primary: const Color.fromARGB(212, 20, 20, 20),
-                  onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                  backgroundColor: const Color.fromARGB(212, 20, 20, 20),
+                  foregroundColor: const Color.fromARGB(255, 53, 53, 53)),
             ),
             const SizedBox(
               width: 20,

@@ -3,6 +3,7 @@ import 'package:captcha/tiles/brand_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_count_down/date_count_down.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../brand_products.dart';
@@ -49,7 +50,7 @@ class _AllState extends State<All> {
                               style: TextStyle(fontSize: 13),
                             ),
                             CountDownText(
-                              due: DateTime.parse("2023-10-20 00:00:00"),
+                              due: DateTime.parse("2027-10-20 00:00:00"),
                               finishedText: "Ended",
                               showLabel: true,
                               longDateName: false,
@@ -100,7 +101,7 @@ class _AllState extends State<All> {
                                     discount: firestoreitems[index]['discount']
                                         .toString(),
                                     onTap: () {
-                                      Get.to(() => Order(
+                                      Get.to(() => OrderPage(
                                             url: firestoreitems[index]['image'],
                                             price: firestoreitems[index]
                                                     ['price']
@@ -207,11 +208,11 @@ class _AllState extends State<All> {
                           );
                         }
                       }),
-                  Padding(
-                    padding: const EdgeInsets.only(
+                  const Padding(
+                    padding: EdgeInsets.only(
                         top: 25.0, left: 8, right: 8, bottom: 5),
                     child: Row(
-                      children: const [
+                      children: [
                         Text(
                           "Our Products",
                           style: TextStyle(fontSize: 16),
@@ -219,53 +220,55 @@ class _AllState extends State<All> {
                       ],
                     ),
                   ),
-                  ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Wrap(
-                            children: List.generate(
-                                firestoreitems.length,
-                                ((index) => ProductTile(
-                                      image: firestoreitems[index]['image'],
-                                      title: firestoreitems[index]
-                                          ['productName'],
-                                      desc: firestoreitems[index]
-                                          ['description'],
-                                      price: firestoreitems[index]['price']
-                                          .toString(),
-                                      discount: firestoreitems[index]
-                                              ['discount']
-                                          .toString(),
-                                      onTap: () {
-                                        Get.to(() => Order(
-                                              url: firestoreitems[index]
-                                                  ['image'],
-                                              price: firestoreitems[index]
-                                                      ['price']
-                                                  .toString(),
-                                              title: firestoreitems[index]
-                                                  ['productName'],
-                                              discount: firestoreitems[index]
-                                                      ['discount']
-                                                  .toString(),
-                                              description: firestoreitems[index]
-                                                  ['description'],
-                                              brandStore: firestoreitems[index]
-                                                  ['brand_store'],
-                                              category: firestoreitems[index]
-                                                  ['category'],
-                                              offer: firestoreitems[index]
-                                                  ['offer'],
-                                              productId: firestoreitems[index]
-                                                  ['productID'],
-                                              type: firestoreitems[index]
-                                                  ['type'],
-                                            ));
-                                      },
-                                    ))));
-                      }),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      children: List.generate(
+                        firestoreitems.length,
+                        ((index) => ProductTile(
+                              image: firestoreitems[index]['image'],
+                              title: firestoreitems[index]
+                                  ['productName'],
+                              desc: firestoreitems[index]
+                                  ['description'],
+                              price: firestoreitems[index]['price']
+                                  .toString(),
+                              discount: firestoreitems[index]
+                                      ['discount']
+                                  .toString(),
+                              onTap: () {
+                                Get.to(() => OrderPage(
+                                    url: firestoreitems[index]
+                                        ['image'],
+                                    price: firestoreitems[index]
+                                            ['price']
+                                        .toString(),
+                                    title: firestoreitems[index]
+                                        ['productName'],
+                                    discount: firestoreitems[index]
+                                            ['discount']
+                                        .toString(),
+                                    description: firestoreitems[index]
+                                        ['description'],
+                                    brandStore: firestoreitems[index]
+                                        ['brand_store'],
+                                    category: firestoreitems[index]
+                                        ['category'],
+                                    offer: firestoreitems[index]
+                                        ['offer'],
+                                    productId: firestoreitems[index]
+                                        ['productID'],
+                                    type: firestoreitems[index]
+                                        ['type'],
+                                  )
+                                );
+                              },
+                            )
+                          )
+                        )
+                      ),
+                  ), 
                 ],
               );
             }

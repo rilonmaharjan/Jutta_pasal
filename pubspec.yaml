@@ -37,73 +37,73 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   #firebase
-  firebase_core: ^1.17.0
-  firebase_analytics: ^9.1.8
-  firebase_storage: ^10.2.16
-  cloud_firestore: ^3.1.15
-  firebase_auth: ^3.3.18
-  flutter_facebook_auth: ^4.3.3
+  firebase_core: ^3.6.0
+  firebase_analytics: ^11.3.3
+  firebase_storage: ^12.3.4
+  cloud_firestore: ^5.4.4
+  firebase_auth: ^5.3.1
+  flutter_facebook_auth: ^7.1.1
 
   #google sign in
-  google_sign_in: ^5.3.2
+  google_sign_in: ^6.2.1
 
   #state management
-  provider: ^6.0.3
+  provider: ^6.1.2
 
   #email validate
-  email_validator: ^2.0.1
+  email_validator: ^3.0.0
 
   #state management
-  get: ^4.6.5
-  get_storage: ^2.0.3
+  get: ^4.6.6
+  get_storage: ^2.1.1
 
   #upload image
-  image_picker: ^0.8.5+3
+  image_picker: ^1.1.2
 
   #store image
-  path_provider: ^2.0.10
+  path_provider: ^2.1.4
 
   #cchedimage
-  cached_network_image: ^3.2.0
+  cached_network_image: ^3.4.1
 
   #location
-  geolocator: ^8.2.1
-  geocoding: ^2.0.4
+  geolocator: ^13.0.1
+  geocoding: ^3.0.0
 
   #link to web
-  url_launcher: ^6.1.2
+  url_launcher: ^6.3.1
 
   #font awesom icon
-  font_awesome_flutter: ^10.1.0
+  font_awesome_flutter: ^10.7.0
 
   #loading 
   pull_to_refresh: ^2.0.0
 
   #stickyheader
-  sticky_headers: ^0.2.0
+  sticky_headers: ^0.3.0+2
 
   #carasol slider
-  flutter_carousel_slider: ^1.0.8
+  flutter_carousel_slider: ^1.1.0
 
   #for date
-  date_count_down: ^2.1.0
+  date_count_down: ^3.0.0
 
   #pagination
-  pagination_view: ^2.0.0-nullsafety.0
+  pagination_view: ^2.0.0
 
   #app icon
-  flutter_launcher_icons: "^0.9.2"
+  flutter_launcher_icons: ^0.14.1
 
   #readymande refresh design
-  flutter_spinkit: ^5.1.0
+  flutter_spinkit: ^5.2.1
 
   #permssion access
-  permission_handler: ^9.2.0
-  fvm: ^2.3.1
+  permission_handler: ^11.3.1
+  fvm: ^3.2.1
 
   #shimmer for loading
-  shimmer: ^2.0.0
-
+  shimmer: ^3.0.0
+  flutter_staggered_grid_view: ^0.7.0
 
 dev_dependencies:
   flutter_test:

@@ -187,8 +187,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               fixedSize: const Size(285, 50),
                               textStyle: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w700),
-                              primary: const Color.fromARGB(255, 253, 253, 253),
-                              onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                              backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+                              foregroundColor: const Color.fromARGB(255, 53, 53, 53)),
                         ),
                         const SizedBox(
                           height: 25,
@@ -208,8 +208,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               fixedSize: const Size(285, 50),
                               textStyle: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w700),
-                              primary: const Color.fromARGB(255, 253, 253, 253),
-                              onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                              backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+                              foregroundColor: const Color.fromARGB(255, 53, 53, 53)),
                         ),
                         const SizedBox(
                           height: 30,
@@ -229,8 +229,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               fixedSize: const Size(285, 50),
                               textStyle: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w700),
-                              primary: const Color.fromARGB(255, 181, 210, 255),
-                              onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                              backgroundColor: const Color.fromARGB(255, 181, 210, 255),
+                              foregroundColor: const Color.fromARGB(255, 53, 53, 53)),
                         )
                         //imagepending
                       ],

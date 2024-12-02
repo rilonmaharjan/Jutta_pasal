@@ -27,8 +27,8 @@ class _CartState extends State<Cart> {
           actionsIconTheme: const IconThemeData(color: Colors.black, size: 28),
           backgroundColor: Colors.white,
           elevation: 0.5,
-          title: Row(
-            children: const [
+          title: const Row(
+            children: [
               SizedBox(
                 width: 8,
               ),
@@ -73,7 +73,7 @@ class _CartState extends State<Cart> {
                                     productID: firestoreitems[index]
                                         ['productID'],
                                     onTap: () {
-                                      Get.to(() => Order(
+                                      Get.to(() => OrderPage(
                                             url: firestoreitems[index]['image'],
                                             price: firestoreitems[index]
                                                     ['price']

@@ -42,6 +42,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         showDialog<bool>(
@@ -271,9 +272,9 @@ class _LoginState extends State<Login> {
                               ),
                               ElevatedButton(
                                 onPressed: logIn,
-                                child: Row(
+                                child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.check,
                                       size: 20,
@@ -295,9 +296,9 @@ class _LoginState extends State<Login> {
                                     textStyle: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w700),
-                                    primary: const Color.fromARGB(
+                                    backgroundColor: const Color.fromARGB(
                                         255, 253, 253, 253),
-                                    onPrimary:
+                                    foregroundColor:
                                         const Color.fromARGB(255, 53, 53, 53)),
                               ),
                               const SizedBox(
@@ -415,7 +416,7 @@ class _LoginState extends State<Login> {
       final facebookLogin = await FacebookAuth.instance.login();
       final userData = await FacebookAuth.instance.getUserData();
 
-      final facebookAuthCredential = FacebookAuthProvider.credential(facebookLogin.accessToken!.token);
+      final facebookAuthCredential = FacebookAuthProvider.credential(facebookLogin.accessToken!.tokenString);
       await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 
       await FirebaseFirestore.instance.collection("users").doc(userData['email']).set({

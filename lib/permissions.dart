@@ -62,9 +62,9 @@ class _PermissionsState extends State<Permissions> {
                     const SizedBox(
                       width: 17,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Location Access",
                           style: TextStyle(
@@ -128,9 +128,9 @@ class _PermissionsState extends State<Permissions> {
                     const SizedBox(
                       width: 17,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Camera Access",
                           style: TextStyle(
@@ -194,9 +194,9 @@ class _PermissionsState extends State<Permissions> {
                     const SizedBox(
                       width: 17,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Gallery Access",
                           style: TextStyle(
@@ -260,9 +260,9 @@ class _PermissionsState extends State<Permissions> {
                     const SizedBox(
                       width: 17,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Device State",
                           style: TextStyle(

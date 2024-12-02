@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../order.dart';
@@ -26,42 +27,46 @@ class _SportsState extends State<Sports> {
             } else {
               List<QueryDocumentSnapshot<Object?>> firestoreitems =
                   snapshot.data!.docs;
-              return Wrap(
-                  children: List.generate(
-                      firestoreitems.length,
-                      ((index) => "Sports" ==
-                              firestoreitems[index]['type'].toString()
-                          ? ProductTile(
-                              image: firestoreitems[index]['image'],
-                              title: firestoreitems[index]['productName'],
-                              desc: firestoreitems[index]['description'],
-                              price: firestoreitems[index]['price'].toString(),
-                              discount:
-                                  firestoreitems[index]['discount'].toString(),
-                              onTap: () {
-                                Get.to(() => Order(
-                                      url: firestoreitems[index]['image'],
-                                      price: firestoreitems[index]['price']
-                                          .toString(),
-                                      title: firestoreitems[index]
-                                          ['productName'],
-                                      discount: firestoreitems[index]
-                                              ['discount']
-                                          .toString(),
-                                      description: firestoreitems[index]
-                                          ['description'],
-                                      brandStore: firestoreitems[index]
-                                          ['brand_store'],
-                                      category: firestoreitems[index]
-                                          ['category'],
-                                      offer: firestoreitems[index]['offer'],
-                                      productId: firestoreitems[index]
-                                          ['productID'],
-                                      type: firestoreitems[index]['type'],
-                                    ));
-                              },
-                            )
-                          : const SizedBox())));
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      children: List.generate(
+                          firestoreitems.length,
+                          ((index) => "Sports" ==
+                                  firestoreitems[index]['type'].toString()
+                              ? ProductTile(
+                                  image: firestoreitems[index]['image'],
+                                  title: firestoreitems[index]['productName'],
+                                  desc: firestoreitems[index]['description'],
+                                  price:
+                                      firestoreitems[index]['price'].toString(),
+                                  discount: firestoreitems[index]['discount']
+                                      .toString(),
+                                  onTap: () {
+                                    Get.to(() => OrderPage(
+                                          url: firestoreitems[index]['image'],
+                                          price: firestoreitems[index]['price']
+                                              .toString(),
+                                          title: firestoreitems[index]
+                                              ['productName'],
+                                          discount: firestoreitems[index]
+                                                  ['discount']
+                                              .toString(),
+                                          description: firestoreitems[index]
+                                              ['description'],
+                                          brandStore: firestoreitems[index]
+                                              ['brand_store'],
+                                          category: firestoreitems[index]
+                                              ['category'],
+                                          offer: firestoreitems[index]['offer'],
+                                          productId: firestoreitems[index]
+                                              ['productID'],
+                                          type: firestoreitems[index]['type'],
+                                        ));
+                                  },
+                                )
+                              : const SizedBox()))));
             }
           }),
     );

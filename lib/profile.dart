@@ -35,8 +35,8 @@ class _ProfileState extends State<Profile> {
           actionsIconTheme: const IconThemeData(color: Colors.black, size: 28),
           backgroundColor: Colors.white,
           elevation: 0.5,
-          title: Row(
-            children: const [
+          title: const Row(
+            children: [
               SizedBox(
                 width: 8,
               ),
@@ -138,9 +138,9 @@ class _ProfileState extends State<Profile> {
                                       textStyle: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600),
-                                      onPrimary: const Color.fromARGB(
+                                      foregroundColor: const Color.fromARGB(
                                           255, 184, 183, 183),
-                                      primary: Colors.black),
+                                      backgroundColor: Colors.black),
                                 ),
                                 contentPadding: const EdgeInsets.only(
                                     left: 24, right: 24, bottom: 12, top: 35),
@@ -232,8 +232,8 @@ class _ProfileState extends State<Profile> {
                           offset: Offset(2, 2),
                           blurRadius: 0)
                     ]),
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         SizedBox(
                           width: 18,
                         ),
@@ -430,8 +430,8 @@ class _ProfileState extends State<Profile> {
                   ]),
                   child: Column(
                     children: [
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           SizedBox(
                             width: 20,
                           ),
@@ -487,8 +487,8 @@ class _ProfileState extends State<Profile> {
                                                   .toString(),
                                             ));
                                       },
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           SizedBox(
                                             width: 18,
                                           ),
@@ -510,8 +510,8 @@ class _ProfileState extends State<Profile> {
                                       onTap: () {
                                         Get.to(() => const BusinessProfile());
                                       },
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           SizedBox(
                                             width: 18,
                                           ),
@@ -547,8 +547,8 @@ class _ProfileState extends State<Profile> {
                         onTap: () {
                           Get.to(() => const ChangePassword());
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -582,8 +582,8 @@ class _ProfileState extends State<Profile> {
                   ]),
                   child: Column(
                     children: [
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           SizedBox(
                             width: 20,
                           ),
@@ -615,8 +615,8 @@ class _ProfileState extends State<Profile> {
                               backgroundColor:
                                   const Color.fromARGB(126, 255, 255, 255));
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -648,8 +648,8 @@ class _ProfileState extends State<Profile> {
                         onTap: () {
                           Get.to(() => const Permissions());
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -683,8 +683,8 @@ class _ProfileState extends State<Profile> {
                   ]),
                   child: Column(
                     children: [
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           SizedBox(
                             width: 20,
                           ),
@@ -714,8 +714,8 @@ class _ProfileState extends State<Profile> {
                           String phoneUrl = "tel:+977 9861333461";
                           launchUrl(Uri.parse(phoneUrl));
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -749,8 +749,8 @@ class _ProfileState extends State<Profile> {
                               "market://details?id=com.westbund.heros";
                           launchUrl(Uri.parse(googlePlayLaunch));
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -784,8 +784,8 @@ class _ProfileState extends State<Profile> {
                               "mailto:rilon.maharjan@gmail.com?subject=Feedback to JuttaPasal&body=";
                           launchUrl(Uri.parse(mailUrl));
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -835,8 +835,8 @@ class _ProfileState extends State<Profile> {
                             ),
                           );
                         },
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             SizedBox(
                               width: 18,
                             ),
@@ -875,8 +875,8 @@ class _ProfileState extends State<Profile> {
                           offset: Offset(2, 2),
                           blurRadius: 3)
                     ]),
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         SizedBox(
                           width: 18,
                         ),

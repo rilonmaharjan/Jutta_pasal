@@ -26,9 +26,9 @@ class _AdminProductsState extends State<ProductTile> {
     return GestureDetector(
         onTap: widget.onTap,
         child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 10, bottom: 10),
+          padding: const EdgeInsets.only(left: 4.0, top: 10, bottom: 10,right: 4.0),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width / 2.125,
+            width: MediaQuery.of(context).size.width / 1.9,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,7 +36,7 @@ class _AdminProductsState extends State<ProductTile> {
                   children: [
                     CachedNetworkImage(
                       imageUrl: widget.image,
-                      width: MediaQuery.of(context).size.width / 2.125,
+                      width: MediaQuery.of(context).size.width / 1.9,
                       fit: BoxFit.cover,
                     ),
                     widget.discount.isEmpty

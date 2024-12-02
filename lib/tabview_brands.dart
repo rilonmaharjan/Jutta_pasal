@@ -36,8 +36,8 @@ class _TabViewBrandsState extends State<TabViewBrands> {
                       borderRadius: BorderRadius.circular(7),
                       color: const Color.fromARGB(255, 236, 236, 236),
                     ),
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         SizedBox(
                           width: 15,
                         ),

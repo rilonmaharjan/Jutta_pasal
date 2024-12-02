@@ -323,9 +323,9 @@ class _RegisterState extends State<Register> {
                             ),
                             ElevatedButton(
                               onPressed: register,
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.check,
                                     size: 20,
@@ -347,9 +347,9 @@ class _RegisterState extends State<Register> {
                                   textStyle: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700),
-                                  primary:
+                                  backgroundColor:
                                       const Color.fromARGB(255, 253, 253, 253),
-                                  onPrimary:
+                                  foregroundColor:
                                       const Color.fromARGB(255, 53, 53, 53)),
                             ),
                           ],

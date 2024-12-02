@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../order.dart';
@@ -26,7 +27,10 @@ class _WomenState extends State<Women> {
             } else {
               List<QueryDocumentSnapshot<Object?>> firestoreitems =
                   snapshot.data!.docs;
-              return Wrap(
+              return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: StaggeredGrid.count(
+                      crossAxisCount: 2,
                   children: List.generate(
                       firestoreitems.length,
                       ((index) => "Women" ==
@@ -48,7 +52,7 @@ class _WomenState extends State<Women> {
                               discount:
                                   firestoreitems[index]['discount'].toString(),
                               onTap: () {
-                                Get.to(() => Order(
+                                Get.to(() => OrderPage(
                                       url: firestoreitems[index]['image'],
                                       price: firestoreitems[index]['price']
                                           .toString(),
@@ -70,8 +74,8 @@ class _WomenState extends State<Women> {
                                     ));
                               },
                             )
-                          : const SizedBox())));
-            }
+                          : const SizedBox())))
+            );}
           }),
     );
   }

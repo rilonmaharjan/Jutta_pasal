@@ -75,9 +75,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 ElevatedButton(
                   onPressed: resetPassword,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.reset_tv,
                         size: 20,
@@ -98,8 +98,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       fixedSize: const Size(200, 40),
                       textStyle: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700),
-                      primary: const Color.fromARGB(255, 253, 253, 253),
-                      onPrimary: const Color.fromARGB(255, 53, 53, 53)),
+                      backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+                      foregroundColor: const Color.fromARGB(255, 53, 53, 53)),
                 ),
               ],
             ),

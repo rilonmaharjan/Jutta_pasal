@@ -1,6 +1,7 @@
 import 'package:captcha/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import 'tiles/product_tile.dart';
@@ -106,35 +107,39 @@ class _SearchProductsState extends State<SearchProducts> {
                 } else {
                   List<QueryDocumentSnapshot<Object?>> firestoreitems =
                       snapshot.data!.docs;
-                  return Wrap(
-                      children: List.generate(
-                          firestoreitems.length,
-                          ((index) => ProductTile(
-                                image: firestoreitems[index]['image'],
-                                title: firestoreitems[index]['productName'],
-                                desc: firestoreitems[index]['description'],
-                                price:
-                                    firestoreitems[index]['price'].toString(),
-                                discount: firestoreitems[index]['discount'],
-                                onTap: () {
-                                  Get.to(Order(
-                                    title: firestoreitems[index]['productName'],
-                                    price: firestoreitems[index]['price']
-                                        .toString(),
-                                    discount: firestoreitems[index]['discount'],
-                                    description: firestoreitems[index]
-                                        ['description'],
-                                    url: firestoreitems[index]['image'],
-                                    brandStore: firestoreitems[index]
-                                        ['brand_store'],
-                                    category: firestoreitems[index]['category'],
-                                    offer: firestoreitems[index]['offer'],
-                                    productId: firestoreitems[index]
-                                        ['productID'],
-                                    type: firestoreitems[index]['type'],
-                                  ));
-                                },
-                              ))));
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: StaggeredGrid.count(
+                                crossAxisCount: 2,
+                        children: List.generate(
+                            firestoreitems.length,
+                            ((index) => ProductTile(
+                                  image: firestoreitems[index]['image'],
+                                  title: firestoreitems[index]['productName'],
+                                  desc: firestoreitems[index]['description'],
+                                  price:
+                                      firestoreitems[index]['price'].toString(),
+                                  discount: firestoreitems[index]['discount'],
+                                  onTap: () {
+                                    Get.to(() =>OrderPage(
+                                      title: firestoreitems[index]['productName'],
+                                      price: firestoreitems[index]['price']
+                                          .toString(),
+                                      discount: firestoreitems[index]['discount'],
+                                      description: firestoreitems[index]
+                                          ['description'],
+                                      url: firestoreitems[index]['image'],
+                                      brandStore: firestoreitems[index]
+                                          ['brand_store'],
+                                      category: firestoreitems[index]['category'],
+                                      offer: firestoreitems[index]['offer'],
+                                      productId: firestoreitems[index]
+                                          ['productID'],
+                                      type: firestoreitems[index]['type'],
+                                    ));
+                                  },
+                                )))),
+                  );
                 }
               }),
         ),

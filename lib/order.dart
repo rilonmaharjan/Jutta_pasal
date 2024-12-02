@@ -10,7 +10,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
-class Order extends StatefulWidget {
+class OrderPage extends StatefulWidget {
   final url;
   final String title;
   final price;
@@ -22,7 +22,7 @@ class Order extends StatefulWidget {
   final productId;
   final type;
 
-  const Order({
+  const OrderPage({
     Key? key,
     required this.url,
     required this.price,
@@ -37,10 +37,10 @@ class Order extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Order> createState() => _OrderState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
-class _OrderState extends State<Order> {
+class _OrderPageState extends State<OrderPage> {
   int quantity = 1;
   var total;
   var locationMessage = "";
@@ -76,8 +76,7 @@ class _OrderState extends State<Order> {
 
   Future getAddressFromLatLong() async {
     await Geolocator.requestPermission();
-    var position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    var position = await Geolocator.getCurrentPosition();
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemarks[0];
@@ -172,9 +171,9 @@ class _OrderState extends State<Order> {
                                       productID: widget.productId,
                                     ));
                               },
-                              child: SizedBox(
+                              child: const SizedBox(
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Text(
                                       "See Reviews",
                                       style: TextStyle(
@@ -282,8 +281,8 @@ class _OrderState extends State<Order> {
                     ]),
                     child: Column(
                       children: [
-                        Row(
-                          children: const [
+                        const Row(
+                          children: [
                             Text(
                               "Deliver To",
                               style: TextStyle(
@@ -342,8 +341,8 @@ class _OrderState extends State<Order> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: const [
+                                    const Row(
+                                      children: [
                                         Text(
                                           "Current Location",
                                           style: TextStyle(
@@ -421,8 +420,8 @@ class _OrderState extends State<Order> {
                               minimumSize: const Size(30, 30),
                               textStyle: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w600),
-                              primary: const Color.fromARGB(226, 0, 0, 0),
-                              onPrimary:
+                              backgroundColor: const Color.fromARGB(226, 0, 0, 0),
+                              foregroundColor:
                                   const Color.fromARGB(255, 255, 255, 255)),
                         ),
                         const SizedBox(
@@ -443,8 +442,8 @@ class _OrderState extends State<Order> {
                               minimumSize: const Size(30, 30),
                               textStyle: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w600),
-                              primary: const Color.fromARGB(226, 0, 0, 0),
-                              onPrimary:
+                              backgroundColor: const Color.fromARGB(226, 0, 0, 0),
+                              foregroundColor:
                                   const Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ],
@@ -504,8 +503,8 @@ class _OrderState extends State<Order> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          children: const [
+                        const Row(
+                          children: [
                             Text(
                               "Deliver Fee:",
                               style: TextStyle(fontWeight: FontWeight.w400),
@@ -607,9 +606,9 @@ class _OrderState extends State<Order> {
                   children: [
                     ElevatedButton(
                       onPressed: addtocart,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.shopping_cart,
                             size: 18,
@@ -620,7 +619,7 @@ class _OrderState extends State<Order> {
                           ),
                           Text("Add to Cart",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: Color.fromARGB(255, 238, 238, 238),
                               )),
                         ],
@@ -632,17 +631,17 @@ class _OrderState extends State<Order> {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w600),
-                          onPrimary: const Color.fromARGB(255, 184, 183, 183),
-                          primary: Colors.black),
+                          foregroundColor: const Color.fromARGB(255, 184, 183, 183),
+                          backgroundColor: Colors.black),
                     ),
                     const SizedBox(
                       width: 20,
                     ),
                     ElevatedButton(
                       onPressed: buynow,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.shop,
                             size: 18,
@@ -653,7 +652,7 @@ class _OrderState extends State<Order> {
                           ),
                           Text("Buy Now",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: Color.fromARGB(255, 238, 238, 238),
                               )),
                         ],
@@ -665,8 +664,8 @@ class _OrderState extends State<Order> {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w600),
-                          onPrimary: const Color.fromARGB(255, 184, 183, 183),
-                          primary: Colors.black),
+                          foregroundColor: const Color.fromARGB(255, 184, 183, 183),
+                          backgroundColor: Colors.black),
                     ),
                   ],
                 ),
