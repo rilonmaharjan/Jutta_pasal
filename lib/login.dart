@@ -42,42 +42,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    return WillPopScope(
-      onWillPop: () async {
-        showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text(
-                    "Do you want to exit app?",
-                    style: TextStyle(
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                        onPressed: () => SystemNavigator.pop(),
-                        child: const Text(
-                          "Yes",
-                          style: TextStyle(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                        )),
-                    TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text(
-                          "No",
-                          style: TextStyle(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                        )),
-                  ],
-                ));
-        return true;
-      },
+    return PopScope(
+      canPop: false,
       child: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
